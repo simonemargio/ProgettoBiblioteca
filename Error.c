@@ -14,6 +14,9 @@ void F_error(int e){
         case 2:
             puts("\nErrore allocazione struttura libri");
             break;
+        case 3:
+            puts("\nErrore allocazione struttura albero");
+            break;
     }
     exit(e);
 }

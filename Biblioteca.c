@@ -3,11 +3,14 @@
 #include <string.h>
 #include "Biblioteca.h"
 #include "Error.h"
+#include "Abr.h"
+#define NUMERO_LIBRI_POPOLAMENTO_AUTOMATICO 15
 
 void F_gestione_biblioteca(){
     Biblioteca B=NULL;
     F_alloca_struttura_biblioteca(&B);
     F_popolamento(B);
+
 };
 
 void F_popolamento(Biblioteca B){
@@ -25,9 +28,14 @@ void F_popolamento(Biblioteca B){
                 F_popolamento_da_terminale(B);
                 break;
             case 2: // Popolamento automatico
-                F_popolamento_automatico(B);
+                F_popolamento_automatico(B,NUMERO_LIBRI_POPOLAMENTO_AUTOMATICO);
+
+                // CANCELLA
+                Albero AlberoLibri=B->strutturaLibriPtr;
+                STAMPALIBRI(AlberoLibri);
                 break;
         }
+        puts("\n\n");
     }while(uscitaMenu!=0);
 }
 
@@ -46,12 +54,16 @@ void F_popolamento_da_terminale(Biblioteca B){
 
 }
 
-void F_popolamento_automatico(Biblioteca B){
-
+void F_popolamento_automatico(Biblioteca B, int numeroLibri){
+    if(numeroLibri!=0){
+        F_popolamento_automatico_libro(B,numeroLibri);
+        F_popolamento_automatico(B,numeroLibri-1);
+    }
 }
 
 void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     Libri nuovo_libro=NULL;
+    Albero T=B->strutturaLibriPtr;
     char *titolo=NULL, *autore=NULL;
     int copie=0;
 
@@ -66,14 +78,115 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
         case 2:
             titolo="Il Piccolo Principe";
             autore="Antoine De Sanit";
+            copie=2;
+            break;
+        case 3:
+            titolo="Blockchain";
+            autore="Gianluca Chiap";
+            copie=1;
+            break;
+        case 4:
+            titolo="L'ultima equazione";
+            autore="Mark Alpert";
+            copie=1;
+            break;
+        case 5:
+            titolo="Lego story";
+            autore="Napoleon";
+            copie=2;
+            break;
+        case 6:
+            titolo="Il Piccolo Principe";
+            autore="Antoine De Sanit";
+            copie=4;
+            break;
+        case 7:
+            titolo="Algebra uno";
+            autore="Cutolo";
+            copie=1;
+            break;
+        case 8:
+            titolo="Tredici";
+            autore="Hannah Backer";
+            copie=1;
+            break;
+        case 9:
+            titolo="Thinking in Java";
+            autore="Bonatti";
+            copie=1;
+            break;
+        case 10:
+            titolo="Steve Jobs";
+            autore="Walter Isaacson";
+            copie=2;
+            break;
+        case 11:
+            titolo="Elon Musk";
+            autore="Ashlee Vance";
+            copie=3;
+            break;
+        case 12:
+            titolo="Essential";
+            autore="The minimalist";
+            copie=1;
+            break;
+        case 13:
+            titolo="L'arte dell'inganno";
+            autore="Kevin Mitnick";
+            copie=1;
+            break;
+        case 14:
+            titolo="Cronache del mondo emerso";
+            autore="Licia Troisi";
+            copie=1;
+            break;
+        case 15:
+            titolo="Il linguaggio C";
+            autore="Paul Daniel";
             copie=1;
             break;
     }
     F_alloca_struttura_libro(&nuovo_libro);
     F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
+    F_inserisci_elemento_abr(&T,nuovo_libro,1);
+    B->strutturaLibriPtr=T;
+}
 
+// Sposta in ABR
+void F_inserisci_elemento_abr(Albero *T,void *LibroOStudente, int tipoStruttura){
+  if(F_struttura_vuota(*T)){
+      F_alloca_struttura_albero(T);
+      (*T)->datiBibliotecaPtr=LibroOStudente;
+  }else{
+      if(tipoStruttura){ // Libri
+           Libri LibroAlbero=(*T)->datiBibliotecaPtr, LibroDaAggiungere=LibroOStudente;
+           int confrontoLibri=F_cofronto_titolo_libri(LibroDaAggiungere->titoloPtr,LibroAlbero->titoloPtr);
+           if(confrontoLibri>0) F_inserisci_elemento_abr((&(*T)->sxPtr),LibroOStudente,tipoStruttura);
+           else F_inserisci_elemento_abr((&(*T)->dxPtr),LibroOStudente,tipoStruttura);
+      }else{ // Studenti
+
+      }
+  }
 
 }
+
+
+//CANCELLA
+void STAMPALIBRI(Albero L){
+    if(L){
+        STAMPALIBRI(L->sxPtr);
+        Libri a=L->datiBibliotecaPtr;
+        printf("Titolo:|%s|-Autore:|%s|-Copie:|%d|\n",a->titoloPtr,a->autorePtr,a->copie);
+        STAMPALIBRI(L->dxPtr);
+    }
+}
+
+
+int F_cofronto_titolo_libri(char *s1, char *s2){
+    return strcmp(s1,s2);
+}
+
+
 
 void F_inserisci_informazioni_libro(Libri *L,char *titolo,char *autore, int copie){
     (*L)->autorePtr=autore;
