@@ -96,8 +96,8 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
             copie=2;
             break;
         case 6:
-            titolo="Il Piccolo Principe";
-            autore="Antoine De Sanit";
+            titolo="I Grafi sono belli";
+            autore="Antonio";
             copie=4;
             break;
         case 7:
@@ -162,6 +162,7 @@ void F_inserisci_elemento_abr(Albero *T,void *LibroOStudente, int tipoStruttura)
            Libri LibroAlbero=(*T)->datiBibliotecaPtr, LibroDaAggiungere=LibroOStudente;
            int confrontoLibri=F_cofronto_titolo_libri(LibroDaAggiungere->titoloPtr,LibroAlbero->titoloPtr);
            if(confrontoLibri>0) F_inserisci_elemento_abr((&(*T)->sxPtr),LibroOStudente,tipoStruttura);
+           else if(confrontoLibri==0) LibroAlbero->copie=LibroAlbero->copie+1; // Si aggiunge lo stesso libro, si incrementa il numero di copie
            else F_inserisci_elemento_abr((&(*T)->dxPtr),LibroOStudente,tipoStruttura);
       }else{ // Studenti
 
