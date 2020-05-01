@@ -4,39 +4,74 @@
 #include "Biblioteca.h"
 #include "Error.h"
 #include "Abr.h"
-#define NUMERO_LIBRI_POPOLAMENTO_AUTOMATICO 15
+#define NUMERO_LIBRI_POPOLAMENTO 15
+#define LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE 40
 
 void F_gestione_biblioteca(){
     Biblioteca B=NULL;
     F_alloca_struttura_biblioteca(&B);
     F_popolamento(B);
+    F_engine_biblioteca(B);
 
+    // CANCELLA
+    Albero AlberoLibri=B->strutturaLibriPtr;
+    STAMPALIBRI(AlberoLibri);
 };
 
-void F_popolamento(Biblioteca B){
-    int sceltaMenu=0,uscitaMenu=-1;
+void F_engine_biblioteca(Biblioteca B){
+    int sceltaMenu=0, uscitaMenu=-1;
     do{
-        F_stampa_menu_popolamento();
-        sceltaMenu=F_chiedi_intero("Inserisci il valore numero dell'operazione:",1,'0','2');
+        F_stampa_menu_gestione_biblioteca();
+        sceltaMenu=F_chiedi_intero("Inserisci il numero dell'operazione da effetturare:",1,'0','2');
         switch(sceltaMenu){
             default:
                 break;
+            case 1: // Aggiungi richiesta studente
+                F_aggiungi_richiesta_studente(B);
+                break;
+            case 2: // Prendi in carico una richiesta
+                F_prendi_in_carico_una_richiesta_studente(B);
+                break;
             case 0:
+                // VERIFICARE SE SONO PRESENTI RICHIESTE
                 uscitaMenu=0;
                 break;
-            case 1: // Popolamento da terminale
-                F_popolamento_da_terminale(B);
-                break;
-            case 2: // Popolamento automatico
-                F_popolamento_automatico(B,NUMERO_LIBRI_POPOLAMENTO_AUTOMATICO);
-
-                // CANCELLA
-                Albero AlberoLibri=B->strutturaLibriPtr;
-                STAMPALIBRI(AlberoLibri);
-                break;
         }
-        puts("\n\n");
     }while(uscitaMenu!=0);
+}
+
+void F_aggiungi_richiesta_studente(Biblioteca B){
+    // Da terminale si inserisce la matricola dello studente
+    // Verifico se la matricola dello studente è presente nell'albero
+    // Se non è presente allora lo aggiungo chiedendo nome e cognome
+    // Se è presente allora compilo in automatico il nome e cognome dello studente mostrandolo a video
+    // Da terminale si inserisce il titolo del libro che si vuole prendere
+    // Controllo se il libro esiste
+    // Se esiste verifico il numero di copie
+    // Se ci sono copie decremento di una unità il numero delle copie
+    // Se non ci sono la richiesta viene annullata e mostrata a video
+    // Aggiungo la richiesta dello studente nella coda
+}
+
+void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
+
+}
+
+void F_popolamento(Biblioteca B){
+    int sceltaMenu=0;
+
+    F_stampa_menu_popolamento();
+    sceltaMenu=F_chiedi_intero("Inserisci il numero dell'operazione da effetturare:",1,'0','2');
+    switch(sceltaMenu){
+        default:
+            break;
+        case 1:
+            F_popolamento_da_terminale(B,NUMERO_LIBRI_POPOLAMENTO);
+            break;
+        case 2:
+            F_popolamento_automatico(B,NUMERO_LIBRI_POPOLAMENTO);
+            break;
+    }
 }
 
 void F_alloca_struttura_biblioteca(Biblioteca *B){
@@ -44,14 +79,48 @@ void F_alloca_struttura_biblioteca(Biblioteca *B){
     if(F_struttura_vuota(*B)) F_error(1);
     (*B)->strutturaLibriPtr=NULL;
     (*B)->strutturaStudentiPtr=NULL;
+    (*B)->strutturaGestioneRichieste=NULL;
 }
 
 int F_struttura_vuota(void *S){
     return (!S);
 }
 
-void F_popolamento_da_terminale(Biblioteca B){
+void F_popolamento_da_terminale(Biblioteca B, int numeroLibri){
+    if(numeroLibri!=0){
+        Libri nuovo_libro=NULL; Albero T=B->strutturaLibriPtr;
+        printf("Inserimento del libro numero (%d)",numeroLibri);
+        char *titolo=F_chiedi_stringa("Inserisci il titolo del libro");
+        char *autore=F_chiedi_stringa("Inserisci l'autore del libro");
+        int copie=F_chiedi_intero("Inserisci il numero di copie del libro:",3,'1','9');
+        F_alloca_struttura_libro(&nuovo_libro);
+        F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
+        F_inserisci_elemento_abr(&T,nuovo_libro,1);
+        B->strutturaLibriPtr=T;
+        F_popolamento_da_terminale(B,numeroLibri-1);
+    }
+}
 
+char *F_chiedi_stringa(char *s){
+    /* DICHIARAZIONE VARIABILI */
+    char *tmp=NULL,c='*';
+    void *stringa_uscita=NULL;
+    int i=0;
+
+    tmp=(char *)malloc((LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE)*sizeof(char));
+
+    printf("\nInserisci %s (MAX:%d):",s,LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE);
+
+    for(i=0; (i<LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE && (c= (char) getchar()) != '\n' && c != EOF); i++){
+        tmp[i]=c;
+    }
+    tmp[i]='\0';
+
+    stringa_uscita=malloc(i*sizeof(char)); // Allocazione del giusto spazio per stringhe minori di DIM_STRINGA
+    strcpy(stringa_uscita,tmp); // Copia della stringa nello spazio abitio al suo contenimento
+    free(tmp);
+
+    return stringa_uscita;
 }
 
 void F_popolamento_automatico(Biblioteca B, int numeroLibri){
@@ -250,6 +319,7 @@ void F_stampa_menu_gestione_biblioteca(){
 
 void F_stampa_menu_gestione_biblioteca_richiesta_studente(){
     puts("Gestione biblioteca - Richiesta studente");
-
+    puts("1] Soddisfa una richiesta");
+    puts("2] Sollecita la consegna");
     puts("\n0] Indietro");
 }
