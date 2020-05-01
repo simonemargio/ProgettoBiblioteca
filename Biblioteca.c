@@ -36,8 +36,19 @@ void F_engine_biblioteca(Biblioteca B){
             case 1: // Aggiungi richiesta studente
                 F_aggiungi_richiesta_studente(B);
                 break;
-            case 2: // Prendi in carico una richiesta
-                F_prendi_in_carico_una_richiesta_studente(B);
+            case 2: // Stampa sottomenu gestione richieste
+                F_stampa_menu_gestione_biblioteca_richiesta_studente();
+                sceltaMenu=F_chiedi_intero("Inserisci il numero dell'operazione da effetturare:",1,'0','2');
+                switch(sceltaMenu){
+                    default:
+                        break;
+                    case 1: // Prendi in carico una richiesta
+                        F_prendi_in_carico_una_richiesta_studente(B);
+                        break;
+                    case 2: // Sollecita restituzione libri
+                        puts("Bla bla bla");
+                        break;
+                }
                 break;
             case 0:
                 // VERIFICARE SE SONO PRESENTI RICHIESTE
@@ -75,18 +86,6 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
         B->strutturaGestioneRichieste=C;
     } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
 
-    // Sbalgiato in quanto qui decremento già il numero di copie del libro, invece questo lo devo fare in prendi in carico una richiesta
-   /* if(LibroScelto){
-        if(!LibroScelto->copie)printf("\nIl libro (%s) non e' disponibile. Richiesta annullata.\n",LibroScelto->titoloPtr);
-        else{
-            printf("\nIl libro (%s) e' disponibile, inserisco la richiesta in coda.\n",LibroScelto->titoloPtr);
-            LibroScelto->copie=LibroScelto->copie-1;
-            Coda C=B->strutturaGestioneRichieste;
-            F_inserimento_in_coda(&C,verifica_studente,LibroScelto);
-            B->strutturaGestioneRichieste=C;
-        }
-    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
-    */
 }
 
 void F_richiedi_informazioni_studente(Studenti *S, int matricola){
@@ -108,16 +107,19 @@ void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
         if(F_struttura_vuota(L)) F_error(4);
         if(F_struttura_vuota(S)) F_error(5);
         printf("\nPrendo in carico la richiesta dello studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
+
         if(L->copie!=0){
             L->copie=L->copie-1;
             printf("\nLa richiesta del libro (%s) e' stata accettata.\n\n",L->titoloPtr);
             F_elimina_elemento_coda_in_testa(&C);
+            B->strutturaGestioneRichieste=C;
         }
         else{ // La richiesta viene sospesa e lo studente viene inserito in coda
-            printf("\nIl libro (%s) richiesto dallo studente non e' disponibile. Pertanto la richiesta verra' sospesa.\n",L->titoloPtr);
+            printf("\nIl libro (%s) richiesto dallo studente non e' disponibile. Pertanto la richiesta verra' messa in coda.\n",L->titoloPtr);
+            F_elimina_elemento_coda_in_testa(&C);
+            F_inserimento_in_coda(&C,S,L);
+            B->strutturaGestioneRichieste=C;
         }
-
-
     }else puts("\nNon sono presenti richieste da prendere in carico.");
 }
 
@@ -135,6 +137,8 @@ void F_popolamento(Biblioteca B){
         case 2:
             F_popolamento_automatico(B,NUMERO_LIBRI_POPOLAMENTO);
             break;
+        case 0:
+            exit(0);  // QUI VANNO DEALLOCATE LE STRUTTURE
     }
 }
 

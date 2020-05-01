@@ -17,6 +17,12 @@ void F_error(int e){
         case 3:
             puts("\nErrore allocazione struttura albero");
             break;
+        case 4:
+            puts("\nErrore struttura gestione richieste: struttura libro non presente");
+            break;
+        case 5:
+            puts("\nErrore struttura gestione richieste: struttura studente non presente");
+            break;
     }
     exit(e);
 }

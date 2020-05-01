@@ -13,4 +13,6 @@ void F_alloca_elemento_coda(Coda *C);
 void F_inserimento_in_coda(Coda *C, void *studenteDaInserireInCoda, void *libroPresoDalloStutente);
 void F_elimina_elemento_coda_in_testa(Coda *C);
 
+
+
 #endif //PROGETTOBIBLIOTECA_CODA_H
