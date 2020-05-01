@@ -17,8 +17,10 @@ void F_gestione_biblioteca(){
     // CANCELLA
     Albero AlberoLibri=B->strutturaLibriPtr;
     STAMPALIBRI(AlberoLibri);
+    puts("\n\n");
     Albero AlberoStudenti=B->strutturaStudentiPtr;
     STAMPASTUDENTI(AlberoStudenti);
+    puts("\n\n");
     Coda C=B->strutturaGestioneRichieste;
     STAMPACODA(C);
 };
@@ -65,7 +67,16 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
     Albero L=B->strutturaLibriPtr;
     char *titoloLibroRichiesto=F_chiedi_stringa("Titolo del libro da prendere in prestito");
     Libri LibroScelto=F_cerca_elemento_albero(&L,titoloLibroRichiesto,1);
+
     if(LibroScelto){
+        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n",LibroScelto->titoloPtr);
+        Coda C=B->strutturaGestioneRichieste;
+        F_inserimento_in_coda(&C,verifica_studente,LibroScelto);
+        B->strutturaGestioneRichieste=C;
+    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
+
+    // Sbalgiato in quanto qui decremento già il numero di copie del libro, invece questo lo devo fare in prendi in carico una richiesta
+   /* if(LibroScelto){
         if(!LibroScelto->copie)printf("\nIl libro (%s) non e' disponibile. Richiesta annullata.\n",LibroScelto->titoloPtr);
         else{
             printf("\nIl libro (%s) e' disponibile, inserisco la richiesta in coda.\n",LibroScelto->titoloPtr);
@@ -75,18 +86,7 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
             B->strutturaGestioneRichieste=C;
         }
     } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
-
-
-    // Da terminale si inserisce la matricola dello studente [FATTO]
-    // Verifico se la matricola dello studente è presente nell'albero [FATTO]
-    // Se non è presente allora lo aggiungo chiedendo nome e cognome [FATTO]
-    // Se è presente allora compilo in automatico il nome e cognome dello studente mostrandolo a video [FATTO]
-    // Da terminale si inserisce il titolo del libro che si vuole prendere [FATTO]
-    // Controllo se il libro esiste [FATTO]
-    // Se esiste verifico il numero di copie [FATTO]
-    // Se ci sono copie decremento di una unità il numero delle copie [FATTO]
-    // Se non ci sono la richiesta viene annullata e mostrata a video [FATTO]
-    // Aggiungo la richiesta dello studente nella coda [FATTO]
+    */
 }
 
 void F_richiedi_informazioni_studente(Studenti *S, int matricola){
@@ -101,7 +101,24 @@ void F_richiedi_informazioni_studente(Studenti *S, int matricola){
 
 
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
+    Coda C=B->strutturaGestioneRichieste;
+    if(!F_struttura_vuota(C)){
+        Libri L=C->libroPtr;
+        Studenti S=C->studentePrt;
+        if(F_struttura_vuota(L)) F_error(4);
+        if(F_struttura_vuota(S)) F_error(5);
+        printf("\nPrendo in carico la richiesta dello studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
+        if(L->copie!=0){
+            L->copie=L->copie-1;
+            printf("\nLa richiesta del libro (%s) e' stata accettata.\n\n",L->titoloPtr);
+            F_elimina_elemento_coda_in_testa(&C);
+        }
+        else{ // La richiesta viene sospesa e lo studente viene inserito in coda
+            printf("\nIl libro (%s) richiesto dallo studente non e' disponibile. Pertanto la richiesta verra' sospesa.\n",L->titoloPtr);
+        }
 
+
+    }else puts("\nNon sono presenti richieste da prendere in carico.");
 }
 
 void F_popolamento(Biblioteca B){
