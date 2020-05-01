@@ -40,13 +40,9 @@ void *F_cerca_elemento_albero(Albero *T, void *valoreDaCercare, int tipoStruttur
             char *libroDaCercare=NULL; Libri LibroAlbero=(*T)->datiBibliotecaPtr;
             libroDaCercare=(char*)valoreDaCercare;
             int confrontoTitoli=strcmp(libroDaCercare,LibroAlbero->titoloPtr);
-
-            printf("\n|%s|%s|%d|\n",libroDaCercare,LibroAlbero->titoloPtr,confrontoTitoli);
-
-            if(confrontoTitoli==0){ // Libro presente in biblioteca
+         //   printf("\n|%s|%s|%d|\n",libroDaCercare,LibroAlbero->titoloPtr,confrontoTitoli);
+         if(confrontoTitoli==0){ // Libro presente in biblioteca
                 return LibroAlbero;
-             //   if(LibroAlbero->copie!=0) return LibroAlbero;
-            //    else return NULL;
             }else{
                 if(confrontoTitoli<0) return F_cerca_elemento_albero((&(*T)->dxPtr), valoreDaCercare,tipoStruttura);
                 else return F_cerca_elemento_albero((&(*T)->sxPtr), valoreDaCercare,tipoStruttura);

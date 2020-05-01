@@ -4,6 +4,7 @@
 #include "Biblioteca.h"
 #include "Error.h"
 #include "Abr.h"
+#include "Coda.h"
 #define NUMERO_LIBRI_POPOLAMENTO 15
 #define LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE 40
 
@@ -16,6 +17,10 @@ void F_gestione_biblioteca(){
     // CANCELLA
     Albero AlberoLibri=B->strutturaLibriPtr;
     STAMPALIBRI(AlberoLibri);
+    Albero AlberoStudenti=B->strutturaStudentiPtr;
+    STAMPASTUDENTI(AlberoStudenti);
+    Coda C=B->strutturaGestioneRichieste;
+    STAMPACODA(C);
 };
 
 void F_engine_biblioteca(Biblioteca B){
@@ -40,6 +45,8 @@ void F_engine_biblioteca(Biblioteca B){
     }while(uscitaMenu!=0);
 }
 
+
+
 void F_aggiungi_richiesta_studente(Biblioteca B){
     int matricola=F_chiedi_intero("Inserisci la matricola dello studente che richiede un libro:",10,'0','9');
     Albero S=B->strutturaStudentiPtr;
@@ -63,19 +70,23 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
         else{
             printf("\nIl libro (%s) e' disponibile, inserisco la richiesta in coda.\n",LibroScelto->titoloPtr);
             LibroScelto->copie=LibroScelto->copie-1;
+            Coda C=B->strutturaGestioneRichieste;
+            F_inserimento_in_coda(&C,verifica_studente,LibroScelto);
+            B->strutturaGestioneRichieste=C;
         }
     } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
 
-    // Da terminale si inserisce la matricola dello studente
-    // Verifico se la matricola dello studente è presente nell'albero
-    // Se non è presente allora lo aggiungo chiedendo nome e cognome
-    // Se è presente allora compilo in automatico il nome e cognome dello studente mostrandolo a video
-    // Da terminale si inserisce il titolo del libro che si vuole prendere
-    // Controllo se il libro esiste
-    // Se esiste verifico il numero di copie
-    // Se ci sono copie decremento di una unità il numero delle copie
-    // Se non ci sono la richiesta viene annullata e mostrata a video
-    // Aggiungo la richiesta dello studente nella coda
+
+    // Da terminale si inserisce la matricola dello studente [FATTO]
+    // Verifico se la matricola dello studente è presente nell'albero [FATTO]
+    // Se non è presente allora lo aggiungo chiedendo nome e cognome [FATTO]
+    // Se è presente allora compilo in automatico il nome e cognome dello studente mostrandolo a video [FATTO]
+    // Da terminale si inserisce il titolo del libro che si vuole prendere [FATTO]
+    // Controllo se il libro esiste [FATTO]
+    // Se esiste verifico il numero di copie [FATTO]
+    // Se ci sono copie decremento di una unità il numero delle copie [FATTO]
+    // Se non ci sono la richiesta viene annullata e mostrata a video [FATTO]
+    // Aggiungo la richiesta dello studente nella coda [FATTO]
 }
 
 void F_richiedi_informazioni_studente(Studenti *S, int matricola){
@@ -206,7 +217,7 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
             copie=4;
             break;
         case 7:
-            titolo="Algebra uno";
+            titolo="Algebra";
             autore="Cutolo";
             copie=1;
             break;
@@ -268,6 +279,25 @@ void STAMPALIBRI(Albero L){
     }
 }
 
+//CANCELLA
+void STAMPASTUDENTI(Albero S){
+    if(S){
+        STAMPASTUDENTI(S->sxPtr);
+        Studenti a=S->datiBibliotecaPtr;
+        printf("Nome:|%s|-Cognome:|%s|-Matricola:|%d|\n",a->nomePtr,a->cognomePtr,a->matricola);
+        STAMPASTUDENTI(S->dxPtr);
+    }
+}
+
+//CANCELLA
+void STAMPACODA(Coda C){
+    if(C){
+        Studenti S=C->studentePrt;
+        Libri L=C->libroPtr;
+        printf("Coda matricola|%d|Cognome|%s|Titolo|%s|\n",S->matricola,S->cognomePtr,L->titoloPtr);
+        STAMPACODA(C->nextPrt);
+    }
+}
 
 int F_cofronto_titolo_libri(char *s1, char *s2){
     return strcmp(s1,s2);

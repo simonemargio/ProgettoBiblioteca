@@ -3,6 +3,9 @@
 
 #include "Abr.h"
 
+//CANCELLA
+#include "Coda.h"
+
 struct struttura_gestione_biblioteca{
     void *strutturaLibriPtr;
     void *strutturaStudentiPtr;
@@ -45,7 +48,10 @@ void F_aggiungi_richiesta_studente(Biblioteca B);
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B);
 void F_richiedi_informazioni_studente(Studenti *S, int matricola);
 
+
 // CANCELLA
 void STAMPALIBRI(Albero L);
+void STAMPASTUDENTI(Albero S);
+void STAMPACODA(Coda C);
 
 #endif //PROGETTOBIBLIOTECA_BIBLIOTECA_H
