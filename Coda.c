@@ -6,20 +6,21 @@
 
 void F_alloca_elemento_coda(Coda *C){
     (*C)=(struct struttura_elemento_coda*)malloc(sizeof(struct struttura_elemento_coda));
-    (*C)->studentePrt=NULL;
-    (*C)->libroPtr= NULL;
+    (*C)->codaLibro=NULL;
+    (*C)->codaStudente= NULL;
     (*C)->nextPrt=NULL;
 }
 
-void F_inserimento_in_coda(Coda *C, void *studenteDaInserireInCoda, void *libroPresoDalloStutente){
-    if(F_struttura_vuota(*C)){
+void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInserire, Libro libroDaInserire){
+    if(F_struttura_vuota(*C)) {
         F_alloca_elemento_coda(C);
-        (*C)->studentePrt=studenteDaInserireInCoda;
-        (*C)->libroPtr=libroPresoDalloStutente;
+        (*C)->codaLibro=libroDaInserire;
+        (*C)->codaStudente=studenteDaInserire;
     }else{
-        F_inserimento_in_coda((&(*C)->nextPrt),studenteDaInserireInCoda,libroPresoDalloStutente);
+        F_inserimento_in_coda_richieste_studente((&(*C)->nextPrt),studenteDaInserire,libroDaInserire);
     }
 }
+
 
 
 void F_elimina_elemento_coda_in_testa(Coda *C){

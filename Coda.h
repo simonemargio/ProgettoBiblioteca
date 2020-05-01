@@ -1,18 +1,18 @@
 #ifndef PROGETTOBIBLIOTECA_CODA_H
 #define PROGETTOBIBLIOTECA_CODA_H
 
+
+
 struct struttura_elemento_coda{
-    void *studentePrt;
-    void *libroPtr;
+    struct struttura_gestione_studente *codaStudente;
+    struct struttura_gestione_libro *codaLibro;
     struct struttura_elemento_coda *nextPrt;
 };
 
 typedef struct struttura_elemento_coda *Coda;
 
 void F_alloca_elemento_coda(Coda *C);
-void F_inserimento_in_coda(Coda *C, void *studenteDaInserireInCoda, void *libroPresoDalloStutente);
 void F_elimina_elemento_coda_in_testa(Coda *C);
-
-
+void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInserire, Libro libroDaInserire);
 
 #endif //PROGETTOBIBLIOTECA_CODA_H

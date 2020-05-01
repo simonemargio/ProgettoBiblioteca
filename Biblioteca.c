@@ -8,6 +8,7 @@
 #define NUMERO_LIBRI_POPOLAMENTO 15
 #define LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE 40
 
+
 void F_gestione_biblioteca(){
     Biblioteca B=NULL;
     F_alloca_struttura_biblioteca(&B);
@@ -15,15 +16,15 @@ void F_gestione_biblioteca(){
     F_engine_biblioteca(B);
 
     // CANCELLA
-    Albero AlberoLibri=B->strutturaLibriPtr;
+  /*  Albero AlberoLibri=B->strutturaLibriPtr;
     STAMPALIBRI(AlberoLibri);
     puts("\n\n");
     Albero AlberoStudenti=B->strutturaStudentiPtr;
     STAMPASTUDENTI(AlberoStudenti);
     puts("\n\n");
     Coda C=B->strutturaGestioneRichieste;
-    STAMPACODA(C);
-};
+    STAMPACODA(C);*/
+}
 
 void F_engine_biblioteca(Biblioteca B){
     int sceltaMenu=0, uscitaMenu=-1;
@@ -62,12 +63,12 @@ void F_engine_biblioteca(Biblioteca B){
 
 void F_aggiungi_richiesta_studente(Biblioteca B){
     int matricola=F_chiedi_intero("Inserisci la matricola dello studente che richiede un libro:",10,'0','9');
-    Albero S=B->strutturaStudentiPtr;
-    Studenti verifica_studente=F_cerca_elemento_albero(&S,&matricola,0);
+    AlberoStudente S=B->strutturaStudentiPtr;
+    Studente verifica_studente=F_cerca_studente_abr(&S,matricola);
 
     if(!verifica_studente){
         F_richiedi_informazioni_studente(&verifica_studente, matricola);
-        F_inserisci_elemento_abr(&S,verifica_studente,0);
+        F_inserisci_studente_abr(&S,verifica_studente);
         B->strutturaStudentiPtr=S;
         printf("\nStudente (%s-%s-%d) aggiunto all'archivio della biblioteca.\n",verifica_studente->cognomePtr,verifica_studente->nomePtr,verifica_studente->matricola);
     } else{
@@ -75,21 +76,22 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
         printf("Lo studente e' registrato con i seguenti dati (%s-%s).\n",verifica_studente->cognomePtr,verifica_studente->nomePtr);
     }
 
-    Albero L=B->strutturaLibriPtr;
+    AlberoLibro L=B->strutturaLibriPtr;
     char *titoloLibroRichiesto=F_chiedi_stringa("Titolo del libro da prendere in prestito");
-    Libri LibroScelto=F_cerca_elemento_albero(&L,titoloLibroRichiesto,1);
 
-    if(LibroScelto){
-        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n",LibroScelto->titoloPtr);
-        Coda C=B->strutturaGestioneRichieste;
-        F_inserimento_in_coda(&C,verifica_studente,LibroScelto);
-        B->strutturaGestioneRichieste=C;
+    Libro libroScelto=F_cerca_libro_abr(&L,titoloLibroRichiesto);
+
+    if(libroScelto){
+        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n",libroScelto->titoloPtr);
+        Coda C=B->codaRichiestePtr;
+        F_inserimento_in_coda_richieste_studente(&C,verifica_studente,libroScelto);
+        B->codaRichiestePtr=C;
     } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
 
 }
 
-void F_richiedi_informazioni_studente(Studenti *S, int matricola){
-    (*S)=(struct struttura_gestione_studenti*)malloc(sizeof(struct struttura_gestione_studenti));
+void F_richiedi_informazioni_studente(Studente *S, int matricola){
+    (*S)=(struct struttura_gestione_studente*)malloc(sizeof(struct struttura_gestione_studente));
     printf("Studente con matricola (%d) non presente nell'archivio della biblioteca.\nSi prega di aggiungerlo.",matricola);
     char *nome=F_chiedi_stringa("nome dello studente:");
     char *cognome=F_chiedi_stringa("cognome dello studente:");
@@ -100,10 +102,10 @@ void F_richiedi_informazioni_studente(Studenti *S, int matricola){
 
 
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
-    Coda C=B->strutturaGestioneRichieste;
+    Coda C=B->codaRichiestePtr;
     if(!F_struttura_vuota(C)){
-        Libri L=C->libroPtr;
-        Studenti S=C->studentePrt;
+        Libro L=C->codaLibro;
+        Studente S=C->codaStudente;
         if(F_struttura_vuota(L)) F_error(4);
         if(F_struttura_vuota(S)) F_error(5);
         printf("\nPrendo in carico la richiesta dello studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
@@ -112,13 +114,13 @@ void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
             L->copie=L->copie-1;
             printf("\nLa richiesta del libro (%s) e' stata accettata.\n\n",L->titoloPtr);
             F_elimina_elemento_coda_in_testa(&C);
-            B->strutturaGestioneRichieste=C;
+            B->codaRichiestePtr=C;
         }
         else{ // La richiesta viene sospesa e lo studente viene inserito in coda
             printf("\nIl libro (%s) richiesto dallo studente non e' disponibile. Pertanto la richiesta verra' messa in coda.\n",L->titoloPtr);
             F_elimina_elemento_coda_in_testa(&C);
-            F_inserimento_in_coda(&C,S,L);
-            B->strutturaGestioneRichieste=C;
+            F_inserimento_in_coda_richieste_studente(&C,S,L);
+            B->codaRichiestePtr=C;
         }
     }else puts("\nNon sono presenti richieste da prendere in carico.");
 }
@@ -145,9 +147,9 @@ void F_popolamento(Biblioteca B){
 void F_alloca_struttura_biblioteca(Biblioteca *B){
     (*B)=(struct struttura_gestione_biblioteca*)malloc(sizeof(struct struttura_gestione_biblioteca));
     if(F_struttura_vuota(*B)) F_error(1);
-    (*B)->strutturaLibriPtr=NULL;
     (*B)->strutturaStudentiPtr=NULL;
-    (*B)->strutturaGestioneRichieste=NULL;
+    (*B)->strutturaLibriPtr=NULL;
+    (*B)->codaRichiestePtr=NULL;
 }
 
 int F_struttura_vuota(void *S){
@@ -156,14 +158,14 @@ int F_struttura_vuota(void *S){
 
 void F_popolamento_da_terminale(Biblioteca B, int numeroLibri){
     if(numeroLibri!=0){
-        Libri nuovo_libro=NULL; Albero T=B->strutturaLibriPtr;
+        Libro nuovo_libro=NULL; AlberoLibro T=B->strutturaLibriPtr;
         printf("Inserimento del libro numero (%d)",numeroLibri);
         char *titolo=F_chiedi_stringa("Inserisci il titolo del libro");
         char *autore=F_chiedi_stringa("Inserisci l'autore del libro");
         int copie=F_chiedi_intero("Inserisci il numero di copie del libro:",3,'1','9');
         F_alloca_struttura_libro(&nuovo_libro);
         F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
-        F_inserisci_elemento_abr(&T,nuovo_libro,1);
+        F_inserisci_libro_abr(&T,nuovo_libro);
         B->strutturaLibriPtr=T;
         F_popolamento_da_terminale(B,numeroLibri-1);
     }
@@ -199,8 +201,11 @@ void F_popolamento_automatico(Biblioteca B, int numeroLibri){
 }
 
 void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
-    Libri nuovo_libro=NULL;
-    Albero T=B->strutturaLibriPtr;
+    Libro nuovo_libro=NULL; AlberoLibro T=B->strutturaLibriPtr;
+
+
+   // Libri nuovo_libro=NULL;
+   // Albero T=B->strutturaLibriPtr;
     char *titolo=NULL, *autore=NULL;
     int copie=0;
 
@@ -285,11 +290,13 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     }
     F_alloca_struttura_libro(&nuovo_libro);
     F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
-    F_inserisci_elemento_abr(&T,nuovo_libro,1);
+    F_inserisci_libro_abr(&T,nuovo_libro);
     B->strutturaLibriPtr=T;
+
+
 }
 
-
+/*
 //CANCELLA
 void STAMPALIBRI(Albero L){
     if(L){
@@ -318,7 +325,7 @@ void STAMPACODA(Coda C){
         printf("Coda matricola|%d|Cognome|%s|Titolo|%s|\n",S->matricola,S->cognomePtr,L->titoloPtr);
         STAMPACODA(C->nextPrt);
     }
-}
+}*/
 
 int F_cofronto_titolo_libri(char *s1, char *s2){
     return strcmp(s1,s2);
@@ -326,14 +333,14 @@ int F_cofronto_titolo_libri(char *s1, char *s2){
 
 
 
-void F_inserisci_informazioni_libro(Libri *L,char *titolo,char *autore, int copie){
+void F_inserisci_informazioni_libro(Libro *L,char *titolo,char *autore, int copie){
     (*L)->autorePtr=autore;
     (*L)->titoloPtr=titolo;
     (*L)->copie=copie;
 }
 
-void F_alloca_struttura_libro(Libri *L){
-    (*L)=(struct struttura_gestione_libri*)malloc(sizeof(struct struttura_gestione_libri));
+void F_alloca_struttura_libro(Libro *L){
+    (*L)=(struct struttura_gestione_libro*)malloc(sizeof(struct struttura_gestione_libro));
     if(F_struttura_vuota(L)) F_error(2);
     (*L)->autorePtr=NULL;
     (*L)->titoloPtr=NULL;
