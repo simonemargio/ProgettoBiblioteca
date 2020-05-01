@@ -41,6 +41,31 @@ void F_engine_biblioteca(Biblioteca B){
 }
 
 void F_aggiungi_richiesta_studente(Biblioteca B){
+    int matricola=F_chiedi_intero("Inserisci la matricola dello studente che richiede un libro:",10,'0','9');
+    Albero S=B->strutturaStudentiPtr;
+    Studenti verifica_studente=F_cerca_elemento_albero(&S,&matricola,0);
+
+    if(!verifica_studente){
+        F_richiedi_informazioni_studente(&verifica_studente, matricola);
+        F_inserisci_elemento_abr(&S,verifica_studente,0);
+        B->strutturaStudentiPtr=S;
+        printf("\nStudente (%s-%s-%d) aggiunto all'archivio della biblioteca.\n",verifica_studente->cognomePtr,verifica_studente->nomePtr,verifica_studente->matricola);
+    } else{
+        printf("\nStudente con matricola (%d) presente nell'archivio della biblioteca.\n",verifica_studente->matricola);
+        printf("Lo studente e' registrato con i seguenti dati (%s-%s).\n",verifica_studente->cognomePtr,verifica_studente->nomePtr);
+    }
+
+    Albero L=B->strutturaLibriPtr;
+    char *titoloLibroRichiesto=F_chiedi_stringa("Titolo del libro da prendere in prestito");
+    Libri LibroScelto=F_cerca_elemento_albero(&L,titoloLibroRichiesto,1);
+    if(LibroScelto){
+        if(!LibroScelto->copie)printf("\nIl libro (%s) non e' disponibile. Richiesta annullata.\n",LibroScelto->titoloPtr);
+        else{
+            printf("\nIl libro (%s) e' disponibile, inserisco la richiesta in coda.\n",LibroScelto->titoloPtr);
+            LibroScelto->copie=LibroScelto->copie-1;
+        }
+    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
+
     // Da terminale si inserisce la matricola dello studente
     // Verifico se la matricola dello studente è presente nell'albero
     // Se non è presente allora lo aggiungo chiedendo nome e cognome
@@ -52,6 +77,17 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
     // Se non ci sono la richiesta viene annullata e mostrata a video
     // Aggiungo la richiesta dello studente nella coda
 }
+
+void F_richiedi_informazioni_studente(Studenti *S, int matricola){
+    (*S)=(struct struttura_gestione_studenti*)malloc(sizeof(struct struttura_gestione_studenti));
+    printf("Studente con matricola (%d) non presente nell'archivio della biblioteca.\nSi prega di aggiungerlo.",matricola);
+    char *nome=F_chiedi_stringa("nome dello studente:");
+    char *cognome=F_chiedi_stringa("cognome dello studente:");
+    (*S)->matricola=matricola;
+    (*S)->nomePtr=nome;
+    (*S)->cognomePtr=cognome;
+}
+
 
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
 
@@ -160,9 +196,9 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
             copie=1;
             break;
         case 5:
-            titolo="Lego story";
+            titolo="Lego";
             autore="Napoleon";
-            copie=2;
+            copie=1;
             break;
         case 6:
             titolo="I Grafi sono belli";
@@ -219,25 +255,6 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
     F_inserisci_elemento_abr(&T,nuovo_libro,1);
     B->strutturaLibriPtr=T;
-}
-
-// Sposta in ABR
-void F_inserisci_elemento_abr(Albero *T,void *LibroOStudente, int tipoStruttura){
-  if(F_struttura_vuota(*T)){
-      F_alloca_struttura_albero(T);
-      (*T)->datiBibliotecaPtr=LibroOStudente;
-  }else{
-      if(tipoStruttura){ // Libri
-           Libri LibroAlbero=(*T)->datiBibliotecaPtr, LibroDaAggiungere=LibroOStudente;
-           int confrontoLibri=F_cofronto_titolo_libri(LibroDaAggiungere->titoloPtr,LibroAlbero->titoloPtr);
-           if(confrontoLibri>0) F_inserisci_elemento_abr((&(*T)->sxPtr),LibroOStudente,tipoStruttura);
-           else if(confrontoLibri==0) LibroAlbero->copie=LibroAlbero->copie+1; // Si aggiunge lo stesso libro, si incrementa il numero di copie
-           else F_inserisci_elemento_abr((&(*T)->dxPtr),LibroOStudente,tipoStruttura);
-      }else{ // Studenti
-
-      }
-  }
-
 }
 
 

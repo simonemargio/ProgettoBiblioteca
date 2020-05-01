@@ -43,6 +43,7 @@ char *F_chiedi_stringa(char *s);
 void F_engine_biblioteca(Biblioteca B);
 void F_aggiungi_richiesta_studente(Biblioteca B);
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B);
+void F_richiedi_informazioni_studente(Studenti *S, int matricola);
 
 // CANCELLA
 void STAMPALIBRI(Albero L);
