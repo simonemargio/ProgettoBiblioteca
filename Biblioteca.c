@@ -15,6 +15,8 @@ void F_gestione_biblioteca(){
     F_popolamento(B);
     F_engine_biblioteca(B);
 
+
+
     // CANCELLA
   /*  Albero AlberoLibri=B->strutturaLibriPtr;
     STAMPALIBRI(AlberoLibri);
@@ -52,13 +54,26 @@ void F_engine_biblioteca(Biblioteca B){
                 }
                 break;
             case 0:
-                // VERIFICARE SE SONO PRESENTI RICHIESTE SIA RESTITUZIONE CHE PRESTITO LIBRO
-                uscitaMenu=0;
+                uscitaMenu=F_verifica_richieste(B);
                 break;
         }
     }while(uscitaMenu!=0);
 }
 
+int F_verifica_richieste(Biblioteca B){
+    int controlloRichieste=-1;
+    Coda richieste=B->codaRichiestePtr;
+    Coda restituzioni=B->codaLibriPresiInPrestitoPtr;
+
+    if(!F_struttura_vuota(richieste)) printf("\nSono presenti ancora delle richieste da prendere in carico.\n");
+    if(!F_struttura_vuota(restituzioni)) printf("\nSono presenti ancora delli libri che devono essere restituiti.\nE' consigliabile sollecitare la restituzione.");
+    if(F_struttura_vuota(richieste) && F_struttura_vuota(restituzioni)){
+        printf("\nTutte le richieste sono state effettuate. Uscita.\n");
+        controlloRichieste=0;
+    }
+
+    return controlloRichieste;
+}
 
 void F_aggiungi_richiesta_studente(Biblioteca B){
     int sceltaMenu=0;

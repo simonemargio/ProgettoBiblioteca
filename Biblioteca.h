@@ -60,6 +60,7 @@ Studente F_verifica_registrazione_studente_biblioteca(Biblioteca B);
 void F_stampa_menu_gestione_biblioteca_presa_in_carico_richiesta_consegna_o_restituzione_libro();
 void F_consegna_libro_allo_studente(Biblioteca B);
 void F_studente_restituisce_libro(Biblioteca B);
+int F_verifica_richieste(Biblioteca B);
 
 /*
 // CANCELLA
