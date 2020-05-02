@@ -47,13 +47,12 @@ void F_engine_biblioteca(Biblioteca B){
                         F_prendi_in_carico_una_richiesta_studente(B);
                         break;
                     case 2: // Sollecita restituzione libri
-
                         F_sollecita_restituzione_libri( &(B->strutturaLibriPtr) );
                         break;
                 }
                 break;
             case 0:
-                // VERIFICARE SE SONO PRESENTI RICHIESTE
+                // VERIFICARE SE SONO PRESENTI RICHIESTE SIA RESTITUZIONE CHE PRESTITO LIBRO
                 uscitaMenu=0;
                 break;
         }
@@ -62,6 +61,56 @@ void F_engine_biblioteca(Biblioteca B){
 
 
 void F_aggiungi_richiesta_studente(Biblioteca B){
+    int sceltaMenu=0;
+    F_stampa_menu_gestione_biblioteca_richiesta_o_restituzione_libro();
+    sceltaMenu=F_chiedi_intero("Inserisci il numero dell'operazione da effetturare:",1,'0','2');
+
+    switch(sceltaMenu){
+        default:
+            break;
+        case 1: // Richiesta per prestito libro
+            F_aggiungi_richiesta_studente_prestito_libro(B);
+            break;
+        case 2: // Richiesta per restituzione per libro
+            F_aggiungi_richiesta_studente_restituzione_libro(B);
+            break;
+    }
+
+}
+
+void F_aggiungi_richiesta_studente_restituzione_libro(Biblioteca B){
+    Studente verifica_studente=F_verifica_registrazione_studente_biblioteca(B);
+
+    AlberoLibro L=B->strutturaLibriPtr;
+    char *titoloLibroDaRestituire=F_chiedi_stringa("Titolo del libro da restituire:");
+
+    Libro libroScelto=F_cerca_libro_abr(&L,titoloLibroDaRestituire);
+
+    if(libroScelto){
+        printf("\nIl libro (%s) e' presente nel catalogo della biblioteca, inserisco la richiesta di restituzione in coda.\n",libroScelto->titoloPtr);
+        Coda R=B->codaRestituzioniPtr;
+        F_inserimento_in_coda_richieste_studente(&R,verifica_studente,libroScelto);
+        B->codaRestituzioniPtr=R;
+    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroDaRestituire);
+}
+
+void F_aggiungi_richiesta_studente_prestito_libro(Biblioteca B){
+    Studente verifica_studente=F_verifica_registrazione_studente_biblioteca(B);
+
+    AlberoLibro L=B->strutturaLibriPtr;
+    char *titoloLibroRichiesto=F_chiedi_stringa("Titolo del libro da prendere in prestito");
+
+    Libro libroScelto=F_cerca_libro_abr(&L,titoloLibroRichiesto);
+
+    if(libroScelto){
+        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n",libroScelto->titoloPtr);
+        Coda C=B->codaRichiestePtr;
+        F_inserimento_in_coda_richieste_studente(&C,verifica_studente,libroScelto);
+        B->codaRichiestePtr=C;
+    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
+}
+
+Studente F_verifica_registrazione_studente_biblioteca(Biblioteca B){
     int matricola=F_chiedi_intero("Inserisci la matricola dello studente che richiede un libro:",10,'0','9');
     AlberoStudente S=B->strutturaStudentiPtr;
     Studente verifica_studente=F_cerca_studente_abr(&S,matricola);
@@ -75,19 +124,7 @@ void F_aggiungi_richiesta_studente(Biblioteca B){
         printf("\nStudente con matricola (%d) presente nell'archivio della biblioteca.\n",verifica_studente->matricola);
         printf("Lo studente e' registrato con i seguenti dati (%s-%s).\n",verifica_studente->cognomePtr,verifica_studente->nomePtr);
     }
-
-    AlberoLibro L=B->strutturaLibriPtr;
-    char *titoloLibroRichiesto=F_chiedi_stringa("Titolo del libro da prendere in prestito");
-
-    Libro libroScelto=F_cerca_libro_abr(&L,titoloLibroRichiesto);
-
-    if(libroScelto){
-        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n",libroScelto->titoloPtr);
-        Coda C=B->codaRichiestePtr;
-        F_inserimento_in_coda_richieste_studente(&C,verifica_studente,libroScelto);
-        B->codaRichiestePtr=C;
-    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
-
+    return verifica_studente;
 }
 
 void F_richiedi_informazioni_studente(Studente *S, int matricola){
@@ -102,6 +139,45 @@ void F_richiedi_informazioni_studente(Studente *S, int matricola){
 
 
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
+    int sceltaMenu=0;
+    F_stampa_menu_gestione_biblioteca_presa_in_carico_richiesta_consegna_o_restituzione_libro();
+    sceltaMenu=F_chiedi_intero("Inserisci il numero dell'operazione da effetturare:",1,'0','2');
+
+    switch(sceltaMenu){
+        default:
+            break;
+        case 1: // Consegna il libro allo studente
+            F_consegna_libro_allo_studente(B);
+            break;
+        case 2: // Prendi il libro che aveva in prestito uno studente
+            F_studente_restituisce_libro(B);
+            break;
+    }
+
+}
+
+void F_studente_restituisce_libro(Biblioteca B){
+    Coda R=B->codaRestituzioniPtr;
+    if(!F_struttura_vuota(R)){
+        Libro L=R->codaLibro;
+        Studente S=R->codaStudente;
+        if(F_struttura_vuota(L)) F_error(6);
+        if(F_struttura_vuota(S)) F_error(7);
+        printf("\nPrendo in carico la richiesta dello studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
+
+        Coda P=B->codaLibriPresiInPrestitoPtr;
+        int controlloPrestiti=F_cerca_elemento_coda(&P,S->matricola,L->titoloPtr);
+        if(controlloPrestiti){
+            puts("LO STUDENTE AVEVA FATTO UN PRESTITO");
+        }else puts("LO STUDENTE NON HA FATTO NESSUN PRESTITO PRIMA");
+        //Scorro la coda dei libri presti in prestito e verifico se quello studente effettivamente aveva preso il libro
+        //Se ha preso il libro allora devo eliminare lo studente dalla codaLibriPresiInPrestito e elimino la TESTA di codaRestituzioniPtr
+        //Se non ha preso quel libro la richiesta di restituzione viene annullata e eliminato la TESTA di codaRestituzioniPtr
+
+    }else puts("\nNon sono presenti restituzione da prendere in carico.");
+}
+
+void F_consegna_libro_allo_studente(Biblioteca B){
     Coda C=B->codaRichiestePtr;
     if(!F_struttura_vuota(C)){
         Libro L=C->codaLibro;
@@ -113,8 +189,16 @@ void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
         if(L->copie!=0){
             L->copie=L->copie-1;
             printf("\nLa richiesta del libro (%s) e' stata accettata.\n\n",L->titoloPtr);
+
+            // Salvo il prestito del libro allo studente
+            Coda P=B->codaLibriPresiInPrestitoPtr;
+            F_inserimento_in_coda_richieste_studente(&P,S,L);
+            B->codaLibriPresiInPrestitoPtr=P;
+
+            // Elimino lo studente dalla coda delle richieste
             F_elimina_elemento_coda_in_testa(&C);
             B->codaRichiestePtr=C;
+
         }
         else{ // La richiesta viene sospesa e lo studente viene inserito in coda
             printf("\nIl libro (%s) richiesto dallo studente non e' disponibile. Pertanto la richiesta verra' messa in coda.\n",L->titoloPtr);
@@ -127,6 +211,9 @@ void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
 
 
 void F_sollecita_restituzione_libri(AlberoLibro *L){
+    // Va riscritta usando la nuova coda degli studenti che hanno preso un libro
+    // Posso quindi anche stampare nome cognome e matricola dello studente
+    // USA CODALIBRIPRESIINPRESTITO
     if(!F_struttura_vuota(*L)){
        F_sollecita_restituzione_libri(&(*L)->sxPtr);
        Libro libroAlbero=(*L)->nodoLibroPtr;
@@ -163,6 +250,8 @@ void F_alloca_struttura_biblioteca(Biblioteca *B){
     (*B)->strutturaStudentiPtr=NULL;
     (*B)->strutturaLibriPtr=NULL;
     (*B)->codaRichiestePtr=NULL;
+    (*B)->codaRestituzioniPtr=NULL;
+    (*B)->codaLibriPresiInPrestitoPtr=NULL;
 }
 
 int F_struttura_vuota(void *S){
@@ -388,7 +477,7 @@ int F_chiedi_intero(char *s,int dim,char minimo,char massimo){
 }
 
 
-void F_stampa_menu_popolamento(){
+void F_stampa_menu_popolamento(){  // a
     puts("Gestione biblioteca - Popolamento");
     puts("Scegli il tipo di popolamento da efettuare:");
     puts("1] Popolamento dei libri tramite terminale (processo lungo)");
@@ -396,16 +485,30 @@ void F_stampa_menu_popolamento(){
     puts("\n0] Esci");
 }
 
-void F_stampa_menu_gestione_biblioteca(){
-    puts("Gestione biblioteca - Menu principale");
+void F_stampa_menu_gestione_biblioteca(){ // b
+    puts("\nGestione biblioteca - Menu principale");
     puts("1] Aggiungi richiesta studente");
     puts("2] Prendi in carico una richiesta");
     puts("\n0] Termina");
 }
 
-void F_stampa_menu_gestione_biblioteca_richiesta_studente(){
-    puts("Gestione biblioteca - Richiesta studente");
+void F_stampa_menu_gestione_biblioteca_richiesta_studente(){ // c
+    puts("\nGestione biblioteca - Richiesta studente");
     puts("1] Soddisfa una richiesta");
     puts("2] Sollecita la consegna");
+    puts("\n0] Indietro");
+}
+
+void F_stampa_menu_gestione_biblioteca_richiesta_o_restituzione_libro(){ // d
+    puts("\nGestione biblioteca - Richiesta studente");
+    puts("1] Richiesta prestito libro");
+    puts("2] Richiesta restituzione libro");
+    puts("\n0] Indietro");
+}
+
+void F_stampa_menu_gestione_biblioteca_presa_in_carico_richiesta_consegna_o_restituzione_libro(){
+    puts("\nGestione biblioteca - Soddisfa richiesta");
+    puts("1] Consegna libro");
+    puts("2] Restituzione libro");
     puts("\n0] Indietro");
 }

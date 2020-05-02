@@ -14,5 +14,6 @@ typedef struct struttura_elemento_coda *Coda;
 void F_alloca_elemento_coda(Coda *C);
 void F_elimina_elemento_coda_in_testa(Coda *C);
 void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInserire, Libro libroDaInserire);
+int F_cerca_elemento_coda(Coda *C, int matricola, char *titoloLibro);
 
 #endif //PROGETTOBIBLIOTECA_CODA_H

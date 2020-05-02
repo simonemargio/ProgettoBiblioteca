@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "Biblioteca.h"
 #include "Coda.h"
 
@@ -21,12 +22,20 @@ void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInseri
     }
 }
 
-
-
 void F_elimina_elemento_coda_in_testa(Coda *C){
     if(!F_struttura_vuota(*C)){
         Coda elementoDaEliminare = *C;
         *C = elementoDaEliminare->nextPrt;
         free(elementoDaEliminare);
     }
+}
+
+
+int F_cerca_elemento_coda(Coda *C, int matricola, char *titoloLibro){
+    if((*C)==NULL) return 0;
+    Studente S=(*C)->codaStudente;
+    Libro L=(*C)->codaLibro;
+    int confrontoTitoliLibro=strcmp(L->titoloPtr,titoloLibro);
+    if(S->matricola==matricola && confrontoTitoliLibro==0) return 1;
+    return F_cerca_elemento_coda((&(*C)->nextPrt),matricola,titoloLibro);
 }

@@ -11,6 +11,8 @@ struct struttura_gestione_biblioteca{
     struct struttura_nodo_albero_studente *strutturaStudentiPtr;
     struct struttura_nodo_albero_libro *strutturaLibriPtr;
     struct struttura_elemento_coda *codaRichiestePtr;
+    struct struttura_elemento_coda *codaRestituzioniPtr;
+    struct struttura_elemento_coda *codaLibriPresiInPrestitoPtr;
 };
 
 struct struttura_gestione_libro{
@@ -51,7 +53,13 @@ void F_aggiungi_richiesta_studente(Biblioteca B);
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B);
 void F_richiedi_informazioni_studente(Studente *S, int matricola);
 void F_sollecita_restituzione_libri(AlberoLibro *L);
-
+void F_stampa_menu_gestione_biblioteca_richiesta_o_restituzione_libro();
+void F_aggiungi_richiesta_studente_prestito_libro(Biblioteca B);
+void F_aggiungi_richiesta_studente_restituzione_libro(Biblioteca B);
+Studente F_verifica_registrazione_studente_biblioteca(Biblioteca B);
+void F_stampa_menu_gestione_biblioteca_presa_in_carico_richiesta_consegna_o_restituzione_libro();
+void F_consegna_libro_allo_studente(Biblioteca B);
+void F_studente_restituisce_libro(Biblioteca B);
 
 /*
 // CANCELLA
