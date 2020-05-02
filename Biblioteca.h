@@ -62,9 +62,10 @@ void F_consegna_libro_allo_studente(Biblioteca B);
 void F_studente_restituisce_libro(Biblioteca B);
 int F_verifica_richieste(Biblioteca B);
 
-/*
+
 // CANCELLA
-void STAMPALIBRI(Albero L);
+/*
+void STAMPALIBRI(AlberoLibro L);
 void STAMPASTUDENTI(Albero S);
 void STAMPACODA(Coda C);*/
 

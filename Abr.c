@@ -15,7 +15,7 @@ void F_inserisci_libro_abr(AlberoLibro *T, Libro libroDaInserire){
     }else{
         Libro libroAlbero=(*T)->nodoLibroPtr;
         int confrontoLibri=F_cofronto_titolo_libri(libroDaInserire->titoloPtr,libroAlbero->titoloPtr);
-        if(confrontoLibri>0) F_inserisci_libro_abr((&(*T)->sxPtr),libroDaInserire);
+        if(confrontoLibri<0) F_inserisci_libro_abr((&(*T)->sxPtr),libroDaInserire);
         else if(confrontoLibri==0) libroAlbero->copie=libroAlbero->copie+1; // Si aggiunge lo stesso libro, si incrementa il numero di copie
         else F_inserisci_libro_abr((&(*T)->dxPtr),libroDaInserire);
     }
@@ -68,8 +68,8 @@ Libro F_cerca_libro_abr(AlberoLibro *T, char *libroDaCercare){
         if(confrontoTitoli==0){ // Libro presente in biblioteca
             return libroAlbero;
         }else{
-            if(confrontoTitoli<0) return F_cerca_libro_abr((&(*T)->dxPtr),libroDaCercare);
-            else return F_cerca_libro_abr((&(*T)->sxPtr), libroDaCercare);
+            if(confrontoTitoli<0) return F_cerca_libro_abr((&(*T)->sxPtr),libroDaCercare);
+            else return F_cerca_libro_abr((&(*T)->dxPtr), libroDaCercare);
         }
     }
 }

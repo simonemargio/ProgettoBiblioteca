@@ -18,8 +18,8 @@ void F_gestione_biblioteca(){
 
 
     // CANCELLA
-  /*  Albero AlberoLibri=B->strutturaLibriPtr;
-    STAMPALIBRI(AlberoLibri);
+   /*  AlberoLibro A=B->strutturaLibriPtr;
+      STAMPALIBRI(A);
     puts("\n\n");
     Albero AlberoStudenti=B->strutturaStudentiPtr;
     STAMPASTUDENTI(AlberoStudenti);
@@ -193,7 +193,7 @@ void F_studente_restituisce_libro(Biblioteca B){
         F_elimina_elemento_coda_in_testa(&R);
         B->codaRestituzioniPtr=R;
 
-    }else puts("\nNon sono presenti restituzione da prendere in carico.");
+    }else puts("\nNon sono presenti restituzioni da prendere in carico.");
 }
 
 void F_consegna_libro_allo_studente(Biblioteca B){
@@ -237,7 +237,9 @@ void F_sollecita_restituzione_libri(Biblioteca B){
         printf("\nLo studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
         printf("\n\nHa restituito il libro:\nTitolo:%s\nAutore:%s\n\n",L->titoloPtr,L->autorePtr);
         L->copie=L->copie+1;
+        Coda elementoDaEliminare=P;
         P=P->nextPrt;
+        free(elementoDaEliminare);
     }
     puts("\nTutti i libri presi in prestito sono stati consegnati.");
     B->codaLibriPresiInPrestitoPtr=P;
@@ -414,12 +416,13 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     B->strutturaLibriPtr=T;
 }
 
-/*
+
 //CANCELLA
-void STAMPALIBRI(Albero L){
+/*
+void STAMPALIBRI(AlberoLibro L){
     if(L){
         STAMPALIBRI(L->sxPtr);
-        Libri a=L->datiBibliotecaPtr;
+        Libro a=L->nodoLibroPtr;
         printf("Titolo:|%s|-Autore:|%s|-Copie:|%d|\n",a->titoloPtr,a->autorePtr,a->copie);
         STAMPALIBRI(L->dxPtr);
     }
