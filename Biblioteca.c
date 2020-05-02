@@ -237,9 +237,11 @@ void F_sollecita_restituzione_libri(Biblioteca B){
         printf("\nLo studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
         printf("\n\nHa restituito il libro:\nTitolo:%s\nAutore:%s\n\n",L->titoloPtr,L->autorePtr);
         L->copie=L->copie+1;
-        Coda elementoDaEliminare=P;
-        P=P->nextPrt;
-        free(elementoDaEliminare);
+
+        F_elimina_elemento_coda_in_testa(&P);
+        //Coda elementoDaEliminare=P;
+        //P=P->nextPrt;
+        //free(elementoDaEliminare);
     }
     puts("\nTutti i libri presi in prestito sono stati consegnati.");
     B->codaLibriPresiInPrestitoPtr=P;
