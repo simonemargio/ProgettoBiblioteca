@@ -32,10 +32,24 @@ void F_elimina_elemento_coda_in_testa(Coda *C){
 
 
 int F_cerca_elemento_coda(Coda *C, int matricola, char *titoloLibro){
-    if((*C)==NULL) return 0;
+    if(F_struttura_vuota(*C)) return 0;
     Studente S=(*C)->codaStudente;
     Libro L=(*C)->codaLibro;
     int confrontoTitoliLibro=strcmp(L->titoloPtr,titoloLibro);
     if(S->matricola==matricola && confrontoTitoliLibro==0) return 1;
     return F_cerca_elemento_coda((&(*C)->nextPrt),matricola,titoloLibro);
+}
+
+Coda F_elimina_elemento_coda(Coda C, int matricola, char *titoloLibro){
+    if(!F_struttura_vuota(C)){
+        Studente S=C->codaStudente;
+        Libro L=C->codaLibro;
+        int confrontoTitoliLibro=strcmp(L->titoloPtr,titoloLibro);
+        if(S->matricola==matricola && confrontoTitoliLibro==0){
+            Coda salvaNextPtr=C->nextPrt;
+            free(C);
+            return salvaNextPtr;
+        } else C->nextPrt=F_elimina_elemento_coda(C->nextPrt,matricola,titoloLibro);
+    }
+    return C;
 }

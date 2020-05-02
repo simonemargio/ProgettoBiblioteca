@@ -168,11 +168,15 @@ void F_studente_restituisce_libro(Biblioteca B){
         Coda P=B->codaLibriPresiInPrestitoPtr;
         int controlloPrestiti=F_cerca_elemento_coda(&P,S->matricola,L->titoloPtr);
         if(controlloPrestiti){
-            puts("LO STUDENTE AVEVA FATTO UN PRESTITO");
-        }else puts("LO STUDENTE NON HA FATTO NESSUN PRESTITO PRIMA");
-        //Scorro la coda dei libri presti in prestito e verifico se quello studente effettivamente aveva preso il libro
-        //Se ha preso il libro allora devo eliminare lo studente dalla codaLibriPresiInPrestito e elimino la TESTA di codaRestituzioniPtr
-        //Se non ha preso quel libro la richiesta di restituzione viene annullata e eliminato la TESTA di codaRestituzioniPtr
+            printf("\nLo studente aveva preso in prestito il libro:\nTitolo:%s\nAutore:%s\n\n",L->titoloPtr,L->autorePtr);
+            B->codaLibriPresiInPrestitoPtr=F_elimina_elemento_coda(P,S->matricola,L->titoloPtr);
+            //Aggiorno il numero di copie
+            L->copie=L->copie+1;
+            printf("\nIl libro e' ritornato in biblioteca.\n");
+        }else printf("\nLo studente non ha mai preso in prestito il libro:\nTitolo:%s\nAutore:%s\n\nLa richiesta e' annullata.\n",L->titoloPtr,L->autorePtr);
+
+        F_elimina_elemento_coda_in_testa(&R);
+        B->codaRestituzioniPtr=R;
 
     }else puts("\nNon sono presenti restituzione da prendere in carico.");
 }
