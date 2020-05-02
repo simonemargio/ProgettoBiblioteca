@@ -47,7 +47,8 @@ void F_engine_biblioteca(Biblioteca B){
                         F_prendi_in_carico_una_richiesta_studente(B);
                         break;
                     case 2: // Sollecita restituzione libri
-                        puts("Bla bla bla");
+
+                        F_sollecita_restituzione_libri( &(B->strutturaLibriPtr) );
                         break;
                 }
                 break;
@@ -58,7 +59,6 @@ void F_engine_biblioteca(Biblioteca B){
         }
     }while(uscitaMenu!=0);
 }
-
 
 
 void F_aggiungi_richiesta_studente(Biblioteca B){
@@ -123,6 +123,19 @@ void F_prendi_in_carico_una_richiesta_studente(Biblioteca B){
             B->codaRichiestePtr=C;
         }
     }else puts("\nNon sono presenti richieste da prendere in carico.");
+}
+
+
+void F_sollecita_restituzione_libri(AlberoLibro *L){
+    if(!F_struttura_vuota(*L)){
+       F_sollecita_restituzione_libri(&(*L)->sxPtr);
+       Libro libroAlbero=(*L)->nodoLibroPtr;
+       if(!libroAlbero->copie){
+           libroAlbero->copie=libroAlbero->copie+1;
+           printf("E' stato restituito il libro:\nTitolo:%s\nAutore:%s\n\n",libroAlbero->titoloPtr,libroAlbero->autorePtr);
+       }
+       F_sollecita_restituzione_libri(&(*L)->dxPtr);
+    }
 }
 
 void F_popolamento(Biblioteca B){
@@ -292,8 +305,6 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
     F_inserisci_libro_abr(&T,nuovo_libro);
     B->strutturaLibriPtr=T;
-
-
 }
 
 /*
