@@ -25,7 +25,7 @@ void F_alloca_struttura_libro_abr(AlberoLibro *T){
     (*T)=(struct struttura_nodo_albero_libro*)malloc(sizeof(struct struttura_nodo_albero_libro));
     if(F_struttura_vuota(T)) F_error(3);
     (*T)->nodoLibroPtr=NULL;
-    (*T)->dxPtr=NULL;
+    (*T)->sxPtr=NULL;
     (*T)->dxPtr=NULL;
 }
 
