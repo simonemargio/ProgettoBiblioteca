@@ -47,7 +47,7 @@ void F_engine_biblioteca(Biblioteca B){
                         F_prendi_in_carico_una_richiesta_studente(B);
                         break;
                     case 2: // Sollecita restituzione libri
-                        F_sollecita_restituzione_libri( &(B->strutturaLibriPtr) );
+                        F_sollecita_restituzione_libri(B);
                         break;
                 }
                 break;
@@ -214,19 +214,18 @@ void F_consegna_libro_allo_studente(Biblioteca B){
 }
 
 
-void F_sollecita_restituzione_libri(AlberoLibro *L){
-    // Va riscritta usando la nuova coda degli studenti che hanno preso un libro
-    // Posso quindi anche stampare nome cognome e matricola dello studente
-    // USA CODALIBRIPRESIINPRESTITO
-    if(!F_struttura_vuota(*L)){
-       F_sollecita_restituzione_libri(&(*L)->sxPtr);
-       Libro libroAlbero=(*L)->nodoLibroPtr;
-       if(!libroAlbero->copie){
-           libroAlbero->copie=libroAlbero->copie+1;
-           printf("E' stato restituito il libro:\nTitolo:%s\nAutore:%s\n\n",libroAlbero->titoloPtr,libroAlbero->autorePtr);
-       }
-       F_sollecita_restituzione_libri(&(*L)->dxPtr);
+void F_sollecita_restituzione_libri(Biblioteca B){
+    Coda P=B->codaLibriPresiInPrestitoPtr;
+    while(!F_struttura_vuota(P)){
+        Libro L=P->codaLibro;
+        Studente S=P->codaStudente;
+        printf("\nLo studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
+        printf("\n\nHa restituito il libro:\nTitolo:%s\nAutore:%s\n\n",L->titoloPtr,L->autorePtr);
+        L->copie=L->copie+1;
+        P=P->nextPrt;
     }
+    puts("\nTutti i libri presi in prestito sono stati consegnati.");
+    B->codaLibriPresiInPrestitoPtr=P;
 }
 
 void F_popolamento(Biblioteca B){

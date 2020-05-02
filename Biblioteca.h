@@ -52,7 +52,7 @@ void F_engine_biblioteca(Biblioteca B);
 void F_aggiungi_richiesta_studente(Biblioteca B);
 void F_prendi_in_carico_una_richiesta_studente(Biblioteca B);
 void F_richiedi_informazioni_studente(Studente *S, int matricola);
-void F_sollecita_restituzione_libri(AlberoLibro *L);
+void F_sollecita_restituzione_libri(Biblioteca B);
 void F_stampa_menu_gestione_biblioteca_richiesta_o_restituzione_libro();
 void F_aggiungi_richiesta_studente_prestito_libro(Biblioteca B);
 void F_aggiungi_richiesta_studente_restituzione_libro(Biblioteca B);
