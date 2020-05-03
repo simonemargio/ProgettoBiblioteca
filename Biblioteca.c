@@ -212,11 +212,11 @@ void F_aggiungi_richiesta_studente_prestito_libro(Biblioteca B){
     Libro libroScelto=F_cerca_libro_abr(&L,titoloLibroRichiesto);
 
     if(libroScelto){
-        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n",libroScelto->titoloPtr);
+        printf("\nIl libro (%s) e' presente nella biblioteca, inserisco la richiesta in coda.\n\n",libroScelto->titoloPtr);
         Coda C=B->codaRichiestePtr;
         F_inserimento_in_coda_richieste_studente(&C,verifica_studente,libroScelto);
         B->codaRichiestePtr=C;
-    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroRichiesto);
+    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n\n",titoloLibroRichiesto);
 }
 
 /*
@@ -269,7 +269,7 @@ Studente F_verifica_registrazione_studente_biblioteca(Biblioteca B){
 void F_richiedi_informazioni_studente(Studente *S, int matricola){
     (*S)=(struct struttura_gestione_studente*)malloc(sizeof(struct struttura_gestione_studente));
     if(F_struttura_vuota(*S)) F_error(6);
-    printf("Studente con matricola (%d) non presente nell'archivio della biblioteca.\nSi prega di aggiungerlo.",matricola);
+    printf("\nStudente con matricola (%d) non presente nell'archivio della biblioteca.\nSi prega di aggiungerlo.",matricola);
     char *nome=F_chiedi_stringa("nome dello studente:");
     char *cognome=F_chiedi_stringa("cognome dello studente:");
     (*S)->matricola=matricola;
@@ -570,10 +570,10 @@ void F_popolamento_da_terminale(Biblioteca B, int numeroLibri){
      */
     if(numeroLibri!=0){
         Libro nuovo_libro=NULL; AlberoLibro T=B->strutturaLibriPtr;
-        printf("Inserimento del libro numero (%d)",numeroLibri);
+        printf("\nInserimento del libro numero (%d)",numeroLibri);
         char *titolo=F_chiedi_stringa("Inserisci il titolo del libro");
         char *autore=F_chiedi_stringa("Inserisci l'autore del libro");
-        int copie=F_chiedi_intero("Inserisci il numero di copie del libro:",3,'1','9');
+        int copie=F_chiedi_intero("\nInserisci il numero di copie del libro:",3,'1','9');
         F_alloca_struttura_libro(&nuovo_libro);
         F_inserisci_informazioni_libro(&nuovo_libro,titolo,autore,copie);
         F_inserisci_libro_abr(&T,nuovo_libro);
@@ -889,37 +889,48 @@ int F_chiedi_intero(char *s,int dim,char minimo,char massimo){
  *
 */
 void F_stampa_menu_popolamento(){
-    puts("Gestione biblioteca - Popolamento");
+    puts("Laboratorio di algoritmi e strutture dati\nSimone Margio - N86001098");
+    puts("-------------------------------------------------------------");
+    puts("Gestione biblioteca - Popolamento\n");
     puts("Scegli il tipo di popolamento da efettuare:");
     puts("1] Popolamento dei libri tramite terminale (processo lungo)");
     puts("2] Popolamento dei libri automatico");
     puts("\n0] Esci");
+    puts("-------------------------------------------------------------");
 }
 
 void F_stampa_menu_gestione_biblioteca(){
-    puts("\nGestione biblioteca - Menu principale");
+    puts("---------------------------------------------");
+    puts("\nGestione biblioteca - Menu principale\n");
     puts("1] Aggiungi richiesta studente");
     puts("2] Prendi in carico una richiesta");
     puts("\n0] Termina");
+    puts("---------------------------------------------");
 }
 
 void F_stampa_menu_gestione_biblioteca_richiesta_studente(){
-    puts("\nGestione biblioteca - Richiesta studente");
+    puts("---------------------------------------------");
+    puts("\nGestione biblioteca - Operazione richieste\n");
     puts("1] Soddisfa una richiesta");
     puts("2] Sollecita la consegna");
     puts("\n0] Indietro");
+    puts("---------------------------------------------");
 }
 
 void F_stampa_menu_gestione_biblioteca_richiesta_o_restituzione_libro(){
-    puts("\nGestione biblioteca - Richiesta studente");
+    puts("---------------------------------------------");
+    puts("\nGestione biblioteca - Richiesta studente\n");
     puts("1] Richiesta prestito libro");
     puts("2] Richiesta restituzione libro");
     puts("\n0] Indietro");
+    puts("---------------------------------------------");
 }
 
 void F_stampa_menu_gestione_biblioteca_presa_in_carico_richiesta_consegna_o_restituzione_libro(){
-    puts("\nGestione biblioteca - Soddisfa richiesta");
+    puts("---------------------------------------------");
+    puts("\nGestione biblioteca - Soddisfa richiesta\n");
     puts("1] Consegna libro");
     puts("2] Restituzione libro");
     puts("\n0] Indietro");
+    puts("---------------------------------------------");
 }
