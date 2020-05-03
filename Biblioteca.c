@@ -671,7 +671,7 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
         default:
             break;
         case 1:
-            titolo="Halo Flood";
+            titolo="Halo";
             autore="William Dietz";
             copie=2;
             break;
@@ -686,34 +686,34 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
             copie=1;
             break;
         case 4:
-            titolo="L'ultima equazione";
+            titolo="Vegan";
             autore="Mark Alpert";
-            copie=1;
+            copie=3;
             break;
         case 5:
             titolo="Lego";
             autore="Napoleon";
-            copie=1;
+            copie=2;
             break;
         case 6:
-            titolo="I Grafi sono belli";
-            autore="Antonio";
+            titolo="Teoria dei grafi";
+            autore="Aniello Murano";
             copie=4;
             break;
         case 7:
             titolo="Algebra";
-            autore="Cutolo";
-            copie=1;
+            autore="Cutolo Giovanni";
+            copie=2;
             break;
         case 8:
             titolo="Tredici";
             autore="Hannah Backer";
-            copie=1;
+            copie=3;
             break;
         case 9:
-            titolo="Thinking in Java";
+            titolo="Thinking in java";
             autore="Bonatti";
-            copie=1;
+            copie=2;
             break;
         case 10:
             titolo="Steve Jobs";
@@ -728,7 +728,7 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
         case 12:
             titolo="Essential";
             autore="The minimalist";
-            copie=1;
+            copie=2;
             break;
         case 13:
             titolo="L'arte dell'inganno";
@@ -743,7 +743,7 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
         case 15:
             titolo="Il linguaggio C";
             autore="Paul Daniel";
-            copie=1;
+            copie=2;
             break;
     }
     F_alloca_struttura_libro(&nuovo_libro);
