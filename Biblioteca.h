@@ -61,7 +61,9 @@ void F_stampa_menu_gestione_biblioteca_presa_in_carico_richiesta_consegna_o_rest
 void F_consegna_libro_allo_studente(Biblioteca B);
 void F_studente_restituisce_libro(Biblioteca B);
 int F_verifica_richieste(Biblioteca B);
-
+void F_sollecita_restituzione_libri_presi_in_prestito(Coda *C);
+void F_sollecita_restituzione_libri_richiesti(Coda *C);
+void F_sollecita_restituzione_libri_restituzioni(Coda *C);
 
 // CANCELLA
 /*
