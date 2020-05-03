@@ -144,7 +144,7 @@ void F_sollecita_restituzione_libri_richiesti(Coda *C);
 /* sollecita la restizione dei libri */
 void F_sollecita_restituzione_libri_restituzioni(Coda *C);
 
-/* deallocazione di tutte le strutture */
+/* deallocazione di tutte le strutture */ //
 void F_dealloca_strutture(Biblioteca B);
 
 

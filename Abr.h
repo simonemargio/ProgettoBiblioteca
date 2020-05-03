@@ -33,31 +33,31 @@ typedef struct struttura_nodo_albero_libro *AlberoLibro;
 typedef struct struttura_gestione_libro *Libro;
 typedef struct struttura_gestione_studente *Studente;
 
-/* */
+/* inserimento libro nell'albero */
 void F_inserisci_libro_abr(AlberoLibro *T, Libro libroDaInserire);
 
-/* */
+/* inserimento studente nell'albero */
 void F_inserisci_studente_abr(AlberoStudente *T, Studente studenteDaInserire);
 
-/* */
+/* alloca nodo libro */
 void F_alloca_struttura_libro_abr(AlberoLibro *T);
 
-/* */
+/* alloca nodo studente */
 void F_alloca_struttura_studente_abr(AlberoStudente *T);
 
-/* */
+/* cerca uno studente */
 Studente F_cerca_studente_abr(AlberoStudente *T, int matricolaDaCercare);
 
-/* */
+/* cerca un libro */
 Libro F_cerca_libro_abr(AlberoLibro *T, char *libroDaCercare);
 
-/* */
+/* verifica se l'albero e' vuoto */
 int F_albero_vuoto(void *T);
 
-/* */
+/* deallocazione dell'albero libri */
 void F_dealloca_struttura_albero_libro(AlberoLibro *T);
 
-/* */
+/* deallocazione dell'albero studenti */
 void F_dealloca_struttura_albero_studente(AlberoStudente *T);
 
 #endif //PROGETTOBIBLIOTECA_ABR_H

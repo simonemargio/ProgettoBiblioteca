@@ -26,7 +26,7 @@
  *  Dettagli: gestisce l'intera biblioteca e ogni sua componente
  *  Parametri in: //
  *  Parametri out: //
- *  Chiamante: Main - main
+ *  Chiamante: Main->main
  *
 */
 void F_gestione_biblioteca(){
