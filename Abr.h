@@ -29,5 +29,7 @@ void F_alloca_struttura_studente_abr(AlberoStudente *T);
 Studente F_cerca_studente_abr(AlberoStudente *T, int matricolaDaCercare);
 Libro F_cerca_libro_abr(AlberoLibro *T, char *libroDaCercare);
 int F_albero_vuoto(void *T);
+void F_dealloca_struttura_albero_libro(AlberoLibro *T);
+void F_dealloca_struttura_albero_studente(AlberoStudente *T);
 
 #endif //PROGETTOBIBLIOTECA_ABR_H

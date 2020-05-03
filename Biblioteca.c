@@ -14,7 +14,7 @@ void F_gestione_biblioteca(){
     F_alloca_struttura_biblioteca(&B);
     F_popolamento(B);
     F_engine_biblioteca(B);
-
+    F_dealloca_strutture(B);
 
 
     // CANCELLA
@@ -357,10 +357,6 @@ void F_popolamento_automatico(Biblioteca B, int numeroLibri){
 
 void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     Libro nuovo_libro=NULL; AlberoLibro T=B->strutturaLibriPtr;
-
-
-   // Libri nuovo_libro=NULL;
-   // Albero T=B->strutturaLibriPtr;
     char *titolo=NULL, *autore=NULL;
     int copie=0;
 
@@ -448,6 +444,23 @@ void F_popolamento_automatico_libro(Biblioteca B, int sceltaLibro){
     F_inserisci_libro_abr(&T,nuovo_libro);
     B->strutturaLibriPtr=T;
 }
+
+void F_dealloca_strutture(Biblioteca B){
+    Coda richieste=B->codaRichiestePtr;
+    Coda restituzioni=B->codaRestituzioniPtr;
+    Coda prestiti=B->codaLibriPresiInPrestitoPtr;
+    AlberoLibro alberoLibro=B->strutturaLibriPtr;
+    AlberoStudente alberoStudente=B->strutturaStudentiPtr;
+
+    if(!F_struttura_vuota(richieste)) F_dealloca_struttura_coda(&richieste);
+    if(!F_struttura_vuota(restituzioni)) F_dealloca_struttura_coda(&restituzioni);
+    if(!F_struttura_vuota(prestiti)) F_dealloca_struttura_coda(&prestiti);
+    if(!F_struttura_vuota(alberoLibro)) F_dealloca_struttura_albero_libro(&alberoLibro);
+    if(!F_struttura_vuota(alberoStudente)) F_dealloca_struttura_albero_studente(&alberoStudente);
+}
+
+
+
 
 
 //CANCELLA

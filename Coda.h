@@ -16,5 +16,6 @@ void F_elimina_elemento_coda_in_testa(Coda *C);
 void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInserire, Libro libroDaInserire);
 int F_cerca_elemento_coda(Coda *C, int matricola, char *titoloLibro);
 Coda F_elimina_elemento_coda(Coda C, int matricola, char *titoloLibro);
+void F_dealloca_struttura_coda(Coda *C);
 
 #endif //PROGETTOBIBLIOTECA_CODA_H

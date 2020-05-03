@@ -64,6 +64,7 @@ int F_verifica_richieste(Biblioteca B);
 void F_sollecita_restituzione_libri_presi_in_prestito(Coda *C);
 void F_sollecita_restituzione_libri_richiesti(Coda *C);
 void F_sollecita_restituzione_libri_restituzioni(Coda *C);
+void F_dealloca_strutture(Biblioteca B);
 
 // CANCELLA
 /*

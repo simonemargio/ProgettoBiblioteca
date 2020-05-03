@@ -52,3 +52,10 @@ Coda F_elimina_elemento_coda(Coda C, int matricola, char *titoloLibro){
     }
     return C;
 }
+
+void F_dealloca_struttura_coda(Coda *C){
+    if(!F_struttura_vuota(*C)){
+        F_dealloca_struttura_coda((&(*C)->nextPrt));
+        F_elimina_elemento_coda_in_testa((&(*C)));
+    }
+}
