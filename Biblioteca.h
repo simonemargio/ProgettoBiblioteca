@@ -1,9 +1,6 @@
 #ifndef PROGETTOBIBLIOTECA_BIBLIOTECA_H
 #define PROGETTOBIBLIOTECA_BIBLIOTECA_H
-
 #include "Abr.h"
-
-//CANCELLA
 #include "Coda.h"
 
 
@@ -66,10 +63,6 @@ void F_sollecita_restituzione_libri_richiesti(Coda *C);
 void F_sollecita_restituzione_libri_restituzioni(Coda *C);
 void F_dealloca_strutture(Biblioteca B);
 
-// CANCELLA
-/*
-void STAMPALIBRI(AlberoLibro L);
-void STAMPASTUDENTI(Albero S);
-void STAMPACODA(Coda C);*/
+
 
 #endif //PROGETTOBIBLIOTECA_BIBLIOTECA_H

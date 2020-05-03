@@ -15,17 +15,6 @@ void F_gestione_biblioteca(){
     F_popolamento(B);
     F_engine_biblioteca(B);
     F_dealloca_strutture(B);
-
-
-    // CANCELLA
-   /*  AlberoLibro A=B->strutturaLibriPtr;
-      STAMPALIBRI(A);
-    puts("\n\n");
-    Albero AlberoStudenti=B->strutturaStudentiPtr;
-    STAMPASTUDENTI(AlberoStudenti);
-    puts("\n\n");
-    Coda C=B->strutturaGestioneRichieste;
-    STAMPACODA(C);*/
 }
 
 void F_engine_biblioteca(Biblioteca B){
@@ -462,40 +451,6 @@ void F_dealloca_strutture(Biblioteca B){
     if(!F_struttura_vuota(alberoStudente)) F_dealloca_struttura_albero_studente(&alberoStudente);
 }
 
-
-
-
-
-//CANCELLA
-/*
-void STAMPALIBRI(AlberoLibro L){
-    if(L){
-        STAMPALIBRI(L->sxPtr);
-        Libro a=L->nodoLibroPtr;
-        printf("Titolo:|%s|-Autore:|%s|-Copie:|%d|\n",a->titoloPtr,a->autorePtr,a->copie);
-        STAMPALIBRI(L->dxPtr);
-    }
-}
-
-//CANCELLA
-void STAMPASTUDENTI(Albero S){
-    if(S){
-        STAMPASTUDENTI(S->sxPtr);
-        Studenti a=S->datiBibliotecaPtr;
-        printf("Nome:|%s|-Cognome:|%s|-Matricola:|%d|\n",a->nomePtr,a->cognomePtr,a->matricola);
-        STAMPASTUDENTI(S->dxPtr);
-    }
-}
-
-//CANCELLA
-void STAMPACODA(Coda C){
-    if(C){
-        Studenti S=C->studentePrt;
-        Libri L=C->libroPtr;
-        printf("Coda matricola|%d|Cognome|%s|Titolo|%s|\n",S->matricola,S->cognomePtr,L->titoloPtr);
-        STAMPACODA(C->nextPrt);
-    }
-}*/
 
 int F_cofronto_titolo_libri(char *s1, char *s2){
     return strcmp(s1,s2);
