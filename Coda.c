@@ -4,7 +4,14 @@
 #include "Error.h"
 #include "Coda.h"
 
-
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_alloca_elemento_coda(Coda *C){
     (*C)=(struct struttura_elemento_coda*)malloc(sizeof(struct struttura_elemento_coda));
     if(F_struttura_vuota(*C)) F_error(9);
@@ -13,6 +20,14 @@ void F_alloca_elemento_coda(Coda *C){
     (*C)->nextPrt=NULL;
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInserire, Libro libroDaInserire){
     if(F_struttura_vuota(*C)) {
         F_alloca_elemento_coda(C);
@@ -23,6 +38,14 @@ void F_inserimento_in_coda_richieste_studente(Coda *C, Studente studenteDaInseri
     }
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_elimina_elemento_coda_in_testa(Coda *C){
     if(!F_struttura_vuota(*C)){
         Coda elementoDaEliminare = *C;
@@ -31,7 +54,14 @@ void F_elimina_elemento_coda_in_testa(Coda *C){
     }
 }
 
-
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 int F_cerca_elemento_coda(Coda *C, int matricola, char *titoloLibro){
     if(F_struttura_vuota(*C)) return 0;
     Studente S=(*C)->codaStudente;
@@ -41,6 +71,14 @@ int F_cerca_elemento_coda(Coda *C, int matricola, char *titoloLibro){
     return F_cerca_elemento_coda((&(*C)->nextPrt),matricola,titoloLibro);
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 Coda F_elimina_elemento_coda(Coda C, int matricola, char *titoloLibro){
     if(!F_struttura_vuota(C)){
         Studente S=C->codaStudente;
@@ -55,6 +93,14 @@ Coda F_elimina_elemento_coda(Coda C, int matricola, char *titoloLibro){
     return C;
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_dealloca_struttura_coda(Coda *C){
     if(!F_struttura_vuota(*C)){
         F_dealloca_struttura_coda((&(*C)->nextPrt));

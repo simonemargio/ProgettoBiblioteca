@@ -2,7 +2,14 @@
 #include <stdlib.h>
 #include "Error.h"
 
-
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_error(int e){
     puts("\nERRORE:");
     switch(e){

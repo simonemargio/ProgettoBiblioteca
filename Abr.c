@@ -5,9 +5,14 @@
 #include "Error.h"
 #include "Abr.h"
 
-
-
-
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_inserisci_libro_abr(AlberoLibro *T, Libro libroDaInserire){
     if(F_struttura_vuota(*T)){
         F_alloca_struttura_libro_abr(T);
@@ -21,6 +26,14 @@ void F_inserisci_libro_abr(AlberoLibro *T, Libro libroDaInserire){
     }
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_alloca_struttura_libro_abr(AlberoLibro *T){
     (*T)=(struct struttura_nodo_albero_libro*)malloc(sizeof(struct struttura_nodo_albero_libro));
     if(F_struttura_vuota(T)) F_error(3);
@@ -29,6 +42,14 @@ void F_alloca_struttura_libro_abr(AlberoLibro *T){
     (*T)->dxPtr=NULL;
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_inserisci_studente_abr(AlberoStudente *T, Studente studenteDaInserire){
     if(F_struttura_vuota(*T)){
         F_alloca_struttura_studente_abr(T);
@@ -40,6 +61,14 @@ void F_inserisci_studente_abr(AlberoStudente *T, Studente studenteDaInserire){
     }
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_alloca_struttura_studente_abr(AlberoStudente *T){
     (*T)=(struct struttura_nodo_albero_studente*)malloc(sizeof(struct struttura_nodo_albero_studente));
     if(F_struttura_vuota(T)) F_error(3);
@@ -48,8 +77,14 @@ void F_alloca_struttura_studente_abr(AlberoStudente *T){
     (*T)->dxPtr=NULL;
 }
 
-
-
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 Studente F_cerca_studente_abr(AlberoStudente *T, int matricolaDaCercare){
     if(F_albero_vuoto(*T)) return NULL;
     else{
@@ -60,6 +95,14 @@ Studente F_cerca_studente_abr(AlberoStudente *T, int matricolaDaCercare){
     }
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 Libro F_cerca_libro_abr(AlberoLibro *T, char *libroDaCercare){
     if(F_albero_vuoto(*T)) return NULL;
     else{
@@ -74,10 +117,26 @@ Libro F_cerca_libro_abr(AlberoLibro *T, char *libroDaCercare){
     }
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 int F_albero_vuoto(void *T){
     return (!T);
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_dealloca_struttura_albero_libro(AlberoLibro *T){
     if(!F_struttura_vuota(*T)){
         F_dealloca_struttura_albero_libro((&(*T)->sxPtr));
@@ -88,6 +147,14 @@ void F_dealloca_struttura_albero_libro(AlberoLibro *T){
     }
 }
 
+/*
+ *  Descrizione:
+ *  Dettagli:
+ *  Parametri in:
+ *  Parametri out:
+ *  Chiamante:
+ *
+*/
 void F_dealloca_struttura_albero_studente(AlberoStudente *T){
     if(!F_struttura_vuota(*T)){
         F_dealloca_struttura_albero_studente((&(*T)->sxPtr));
