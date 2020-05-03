@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Biblioteca.h"
+#include "Error.h"
 #include "Coda.h"
 
 
 void F_alloca_elemento_coda(Coda *C){
     (*C)=(struct struttura_elemento_coda*)malloc(sizeof(struct struttura_elemento_coda));
+    if(F_struttura_vuota(*C)) F_error(9);
     (*C)->codaLibro=NULL;
     (*C)->codaStudente= NULL;
     (*C)->nextPrt=NULL;

@@ -145,6 +145,7 @@ Studente F_verifica_registrazione_studente_biblioteca(Biblioteca B){
 
 void F_richiedi_informazioni_studente(Studente *S, int matricola){
     (*S)=(struct struttura_gestione_studente*)malloc(sizeof(struct struttura_gestione_studente));
+    if(F_struttura_vuota(*S)) F_error(6);
     printf("Studente con matricola (%d) non presente nell'archivio della biblioteca.\nSi prega di aggiungerlo.",matricola);
     char *nome=F_chiedi_stringa("nome dello studente:");
     char *cognome=F_chiedi_stringa("cognome dello studente:");
@@ -333,7 +334,7 @@ char *F_chiedi_stringa(char *s){
     int i=0;
 
     tmp=(char *)malloc((LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE)*sizeof(char));
-
+    if(F_struttura_vuota(tmp)) F_error(7);
     printf("\nInserisci %s (MAX:%d):",s,LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE);
 
     for(i=0; (i<LUNGHEZZA_TITOLO_LIBRO_NOMECOGNOME_STUDENTE && (c= (char) getchar()) != '\n' && c != EOF); i++){
@@ -342,6 +343,8 @@ char *F_chiedi_stringa(char *s){
     tmp[i]='\0';
 
     stringa_uscita=malloc(i*sizeof(char)); // Allocazione del giusto spazio per stringhe minori di DIM_STRINGA
+    if(F_struttura_vuota(stringa_uscita)) F_error(7);
+
     strcpy(stringa_uscita,tmp); // Copia della stringa nello spazio abitio al suo contenimento
     free(tmp);
 
@@ -508,7 +511,7 @@ void F_inserisci_informazioni_libro(Libro *L,char *titolo,char *autore, int copi
 
 void F_alloca_struttura_libro(Libro *L){
     (*L)=(struct struttura_gestione_libro*)malloc(sizeof(struct struttura_gestione_libro));
-    if(F_struttura_vuota(L)) F_error(2);
+    if(F_struttura_vuota(*L)) F_error(2);
     (*L)->autorePtr=NULL;
     (*L)->titoloPtr=NULL;
     (*L)->copie=0;
@@ -539,6 +542,7 @@ int F_chiedi_intero(char *s,int dim,char minimo,char massimo){
     }while(flag==0);
 
     int *elemento=malloc(sizeof(int));
+    if(F_struttura_vuota(elemento)) F_error(8);
     memcpy(elemento,&intero_preso,sizeof(int));
     return intero_preso;
 }
