@@ -115,13 +115,13 @@ int F_verifica_richieste(Biblioteca B){
      * azioni da intraprendere (sollecitare la consegna)
      *
      */
-    if(!F_struttura_vuota(richieste) || (!F_struttura_vuota(restituzioni))) printf("\nSono presenti ancora delle richieste da prendere in carico.\nE' consigliabile sollecitare la restituzione.");
-    if(!F_struttura_vuota(prestiti)) printf("\nSono presenti ancora delli libri che devono essere restituiti.\nE' consigliabile sollecitare la restituzione.");
+    if(!F_struttura_vuota(richieste) || (!F_struttura_vuota(restituzioni))) printf("\nSono presenti ancora delle richieste da prendere in carico.\nE' consigliabile sollecitare la restituzione.\n");
+    if(!F_struttura_vuota(prestiti)) printf("\nSono presenti ancora dei libri che devono essere restituiti.\nE' consigliabile sollecitare la restituzione.\n");
     if(F_struttura_vuota(richieste) && F_struttura_vuota(prestiti) && F_struttura_vuota(restituzioni)){
         printf("\nTutte le richieste sono state effettuate. Uscita.\n");
         controlloRichieste=0;
     }
-
+    puts("");
     return controlloRichieste;
 }
 
@@ -174,16 +174,16 @@ void F_aggiungi_richiesta_studente_restituzione_libro(Biblioteca B){
     Studente verifica_studente=F_verifica_registrazione_studente_biblioteca(B);
 
     AlberoLibro L=B->strutturaLibriPtr;
-    char *titoloLibroDaRestituire=F_chiedi_stringa("Titolo del libro da restituire:");
+    char *titoloLibroDaRestituire=F_chiedi_stringa("Titolo del libro da restituire");
 
     Libro libroScelto=F_cerca_libro_abr(&L,titoloLibroDaRestituire);
 
     if(libroScelto){
-        printf("\nIl libro (%s) e' presente nel catalogo della biblioteca, inserisco la richiesta di restituzione in coda.\n",libroScelto->titoloPtr);
+        printf("\nIl libro (%s) e' presente nel catalogo della biblioteca, inserisco la richiesta di restituzione in coda.\n\n",libroScelto->titoloPtr);
         Coda R=B->codaRestituzioniPtr;
         F_inserimento_in_coda_richieste_studente(&R,verifica_studente,libroScelto);
         B->codaRestituzioniPtr=R;
-    } else printf("\nIl libro (%s) non e' presente nell'archivio libi della biblioteca. Richiesta annullata.\n",titoloLibroDaRestituire);
+    } else printf("\nIl libro (%s) non e' presente nell'archivio libri della biblioteca. Richiesta annullata.\n\n",titoloLibroDaRestituire);
 }
 
 /*
@@ -236,7 +236,7 @@ Studente F_verifica_registrazione_studente_biblioteca(Biblioteca B){
      * caso contrario l'albero ritorna lo studente gia' registrato e il sistema mostra le sue informazioni
      *
      */
-    int matricola=F_chiedi_intero("Inserisci la matricola dello studente che richiede un libro:",10,'0','9');
+    int matricola=F_chiedi_intero("\nInserisci la matricola dello studente che richiede un libro:",10,'0','9');
     AlberoStudente S=B->strutturaStudentiPtr;
     Studente verifica_studente=F_cerca_studente_abr(&S,matricola);
     /*
@@ -270,8 +270,8 @@ void F_richiedi_informazioni_studente(Studente *S, int matricola){
     (*S)=(struct struttura_gestione_studente*)malloc(sizeof(struct struttura_gestione_studente));
     if(F_struttura_vuota(*S)) F_error(6);
     printf("\nStudente con matricola (%d) non presente nell'archivio della biblioteca.\nSi prega di aggiungerlo.",matricola);
-    char *nome=F_chiedi_stringa("nome dello studente:");
-    char *cognome=F_chiedi_stringa("cognome dello studente:");
+    char *nome=F_chiedi_stringa("nome dello studente");
+    char *cognome=F_chiedi_stringa("cognome dello studente");
     (*S)->matricola=matricola;
     (*S)->nomePtr=nome;
     (*S)->cognomePtr=cognome;
@@ -330,7 +330,7 @@ void F_studente_restituisce_libro(Biblioteca B){
         Studente S=R->codaStudente;
         if(F_struttura_vuota(L)) F_error(6);
         if(F_struttura_vuota(S)) F_error(7);
-        printf("\nPrendo in carico la richiesta dello studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
+        printf("\nPrendo in carico la richiesta dello studente:\nMatricola: %d\nCognome: %s\nNome: %s",S->matricola,S->cognomePtr,S->nomePtr);
 
         Coda P=B->codaLibriPresiInPrestitoPtr;
         int controlloPrestiti=F_cerca_elemento_coda(&P,S->matricola,L->titoloPtr);
@@ -339,17 +339,17 @@ void F_studente_restituisce_libro(Biblioteca B){
          * che sta consegnando
          */
         if(controlloPrestiti){
-            printf("\nLo studente aveva preso in prestito il libro:\nTitolo:%s\nAutore:%s\n\n",L->titoloPtr,L->autorePtr);
+            printf("\nLo studente aveva preso in prestito il libro:\nTitolo: %s\nAutore: %s\n\n",L->titoloPtr,L->autorePtr);
             B->codaLibriPresiInPrestitoPtr=F_elimina_elemento_coda(P,S->matricola,L->titoloPtr);
             /* Aggiorno il numero di copie */
             L->copie=L->copie+1;
             printf("\nIl libro e' ritornato in biblioteca.\n");
-        }else printf("\nLo studente non ha mai preso in prestito il libro:\nTitolo:%s\nAutore:%s\n\nLa richiesta e' annullata.\n",L->titoloPtr,L->autorePtr);
+        }else printf("\nLo studente non ha mai preso in prestito il libro:\nTitolo: %s\nAutore: %s\n\nLa richiesta e' annullata.\n",L->titoloPtr,L->autorePtr);
 
         F_elimina_elemento_coda_in_testa(&R);
         B->codaRestituzioniPtr=R;
 
-    }else puts("\nNon sono presenti restituzioni da prendere in carico.");
+    }else puts("\nNon sono presenti restituzioni da prendere in carico.\n");
 }
 
 /*
@@ -376,7 +376,7 @@ void F_consegna_libro_allo_studente(Biblioteca B){
         Studente S=C->codaStudente;
         if(F_struttura_vuota(L)) F_error(4);
         if(F_struttura_vuota(S)) F_error(5);
-        printf("\nPrendo in carico la richiesta dello studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
+        printf("\nPrendo in carico la richiesta dello studente:\nMatricola: %d\nCognome: %s\nNome: %s",S->matricola,S->cognomePtr,S->nomePtr);
 
         if(L->copie!=0){
             L->copie=L->copie-1;
@@ -398,7 +398,7 @@ void F_consegna_libro_allo_studente(Biblioteca B){
             F_inserimento_in_coda_richieste_studente(&C,S,L);
             B->codaRichiestePtr=C;
         }
-    }else puts("\nNon sono presenti richieste da prendere in carico.");
+    }else puts("\nNon sono presenti richieste da prendere in carico.\n");
 }
 
 /*
@@ -445,8 +445,8 @@ void F_sollecita_restituzione_libri_richiesti(Coda *C){
     if(!F_struttura_vuota(*C)){
         Libro L=(*C)->codaLibro;
         Studente S=(*C)->codaStudente;
-        printf("\nLo studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
-        printf("\n\nAveva richiesto il libro:\nTitolo:%s\nAutore:%s\nIl sollecito ha annullato la richiesta.\n",L->titoloPtr,L->autorePtr);
+        printf("\nLo studente:\nMatricola: %d\nCognome: %s\nNome: %s",S->matricola,S->cognomePtr,S->nomePtr);
+        printf("\n\nAveva richiesto il libro:\nTitolo: %s\nAutore: %s\nIl sollecito ha annullato la richiesta.\n",L->titoloPtr,L->autorePtr);
         F_sollecita_restituzione_libri_richiesti((&(*C)->nextPrt));
         F_elimina_elemento_coda_in_testa((&(*C)));
     }
@@ -464,8 +464,8 @@ void F_sollecita_restituzione_libri_restituzioni(Coda *C){
     if(!F_struttura_vuota(*C)){
         Libro L=(*C)->codaLibro;
         Studente S=(*C)->codaStudente;
-        printf("\nLo studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
-        printf("\n\nAveva richiesto di restituire il libro:\nTitolo:%s\nAutore:%s\nIl sollecito ha annullato la richiesta.\n",L->titoloPtr,L->autorePtr);
+        printf("\nLo studente:\nMatricola: %d\nCognome: %s\nNome: %s",S->matricola,S->cognomePtr,S->nomePtr);
+        printf("\n\nAveva richiesto di restituire il libro:\nTitolo: %s\nAutore: %s\nIl sollecito ha annullato la richiesta.\n",L->titoloPtr,L->autorePtr);
         F_sollecita_restituzione_libri_restituzioni((&(*C)->nextPrt));
         F_elimina_elemento_coda_in_testa((&(*C)));
     }
@@ -483,8 +483,8 @@ void F_sollecita_restituzione_libri_presi_in_prestito(Coda *C){
     if(!F_struttura_vuota(*C)){
         Libro L=(*C)->codaLibro;
         Studente S=(*C)->codaStudente;
-        printf("\nLo studente:\nMatricola:%d\nCognome:%s\nNome:%s",S->matricola,S->cognomePtr,S->nomePtr);
-        printf("\n\nHa restituito il libro:\nTitolo:%s\nAutore:%s\n\n",L->titoloPtr,L->autorePtr);
+        printf("\nLo studente:\nMatricola: %d\nCognome: %s\nNome: %s",S->matricola,S->cognomePtr,S->nomePtr);
+        printf("\n\nHa restituito il libro:\nTitolo: %s\nAutore: %s\n\n",L->titoloPtr,L->autorePtr);
         L->copie=L->copie+1;
         F_sollecita_restituzione_libri_presi_in_prestito((&(*C)->nextPrt));
         F_elimina_elemento_coda_in_testa((&(*C)));
