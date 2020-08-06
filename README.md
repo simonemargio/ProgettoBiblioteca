@@ -1,4 +1,4 @@
-# Airline Company
+# Library project
 
 ## Index
 ### Documentation
