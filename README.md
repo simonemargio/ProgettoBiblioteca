@@ -34,7 +34,7 @@
 The following documentation is divided into two parts.  
 The first part is intended for developers and those who are willing to understand how the program works at the project level.
 
-On the other hand, is intended for the end user and for those who want to access the correct use of the program, taking advantage of all its features.  
+On the other hand, is intended for the end-user and for those who want to access the correct use of the program, taking advantage of all its features.  
 It is possible to separate the two manuals according to the type of reader to which it should be destined, or consider the use of the entire documentation.
 
 
@@ -83,14 +83,14 @@ It was decided to structure the entire functioning of the library using a single
 All the procedures operate by entering this structure and based on their purpose, they proceed to use the information they need.
 
 This choice has some advantages such as:
-* **Reliability**: it is not necessary to de ﬁ ne functions and/or procedures that take different types as inputs. If in the future some parameters were to change this would lead to having to modify the procedure and all the calls that are made to it to pass the new parameter. With a main structure these modifications are almost nil, only the function/procedure will have to be modified to operate on the new parameters. Obviously the procedures in libraries such as *Abr* or *Coda*, being "independent" libraries provide for input parameters that are appropriate to their functionality, for example the allocation of a node of a tree does not take the entire structure but only the node to be allocated.
+* **Reliability**: it is not necessary to deﬁne functions and/or procedures that take different types as inputs. If in the future some parameters were to change this would lead to having to modify the procedure and all the calls that are made to it to pass the new parameter. With the main structure, these modifications are almost nil, only the function/procedure will have to be modified to operate on the new parameters. Obviously, the procedures in libraries such as *Abr* or *Coda*, being "independent" libraries provide input parameters that are appropriate to their functionality, for example, the allocation of a node of a tree does not take the entire structure but only the node to be allocated.
 * **Maintainability**: the modification of a piece of the program is almost reduced to the minimum as new functions or modifications can be built separately and then linked to the main structure.
 
 ## Double pointers
-Most of the procedures and functions present have been managed with the use of the double pointer technique even if these do not operate on multiple structures at the same time.
+Most of the procedures and functions present have been managed with the use of the double-pointer technique even if these do not operate on multiple structures at the same time.
 
 ## No redundant information
-The information on the students (matriculation, name and surname) and on the books (title, author, copies) are allocated in their respective trees.
+The information on the students (matriculation, name and surname) and the books (title, author, copies) are allocated in their respective trees.
 
 All the operations that can be performed by the application do not allocate any copy of this data but build a pointer to them.
 
@@ -101,14 +101,14 @@ The use of the scanf can lead to various problems from a simple "dirty buﬀer" 
 
 The entire library is free of scanf, ﬄush or similar but is limited to managing the entry of numeric values and strings by analyzing them character by character through the use of the getchar functionality.
 
-If the value taken as input agrees with the context, then we proceed to allocate a suitable structure for containing the value. For example, for strings it is allowed to enter a total of *forty* characters, if this value is exceeded, the string is truncated, if less then a structure of the same size is allocated to contain the string.
+If the value taken as input agrees with the context, then we proceed to allocate a suitable structure for containing the value. For example, for strings it is allowed to enter a total of *forty* characters, if this value is exceeded, the string is truncated, if less than a structure of the same size is allocated to contain the string.
 
 ## Printouts and errors
 The use of the scanf can lead to various problems from a simple "dirty buﬀer" to a complete overﬂow.
 
 The entire library is free of scanf, ﬄush or similar but is limited to managing the entry of numeric values and strings by analyzing them character by character through the use of the getchar functionality.
 
-If the value taken as input agrees with the context, then we proceed to allocate a suitable structure for containing the value. For example, for strings it is allowed to enter a total of *forty* characters, if this value is exceeded, the string is truncated, if less then a structure of the same size is allocated to contain the string.
+If the value taken as input agrees with the context, then we proceed to allocate a suitable structure for containing the value. For example, for strings it is allowed to enter a total of *forty* characters, if this value is exceeded, the string is truncated, if less than a structure of the same size is allocated to contain the string.
 
 ## Deadlock
 To prevent deadlock situations, the Prompt for delivery functionality has been implemented. We consider a deadlock situation when any of the three queues: book delivery requests, book return requests and the queue for delivered books; is not empty.
@@ -117,7 +117,7 @@ The delivery request provides for the delivery of all the books borrowed by the 
 
 # Data structures
 Two main types of data structures are used to manage the library:
-1. Binary search trees (abr).
+1. Binary search trees (ABR).
 2. Linked lists.
 
 ## Main structure
@@ -140,11 +140,11 @@ We have:
 Please refer to the source code for more details on the other structures used.
 
 ## Search binary trees
-Abr's are used to hold information:
+ABR's are used to hold information:
 * Students enrolled in the library.
 * Books that make up the entire library catalog.
 
-The choice to use abr as makes it effective and eﬃcient because the search for an element on *average* has *log2n* complexity where n is the number of nodes in the tree.
+The choice to use ABR as makes it effective and eﬃcient because the search for an element on *average* has *log2n* complexity where n is the number of nodes in the tree.
 
 In this case, it was decided to use the serial number and the title of the book as a discriminating element for the positioning of the element within the tree.
 
@@ -159,14 +159,14 @@ The lists, on the other hand, occupy the space necessary to contain the requeste
 
 # User Manual
 ## Overview
-The following manual aims to facilitate the use of the application by means of a simple and quick overview of all the features available.
+The following manual aims to facilitate the use of the application through a simple and quick overview of all the features available.
 
 ## Data entry
-For correct use of the application it is important to consider:
+For correct use of the application, it is important to consider:
 **The student registration number is a sequence of only numerical values.**  
-In order to carry out the functions, the system requests the insertion of the student's serial number. If this is not present then the student is registered providing the name and surname. If the student is already registered, the system shows his registration data.
+To carry out the functions, the system requests the insertion of the student's serial number. If this is not present then the student is registered to provide the name and surname. If the student is already registered, the system shows his registration data.
 
-**The research of the books and all the operations involved on them are case sensitive.**  
+**The research of the books and all the operations involved in them are case-sensitive.**  
 If a student wants to take the book "Steve Jobs" he will have to write it respecting upper and lower case letters, insertions such as "sTeve JOBS", "steve Jobs" or others are not considered.
 
 **At the end of the manual there is a list of the predefined books** inserted when the automatic population operation is carried out.
